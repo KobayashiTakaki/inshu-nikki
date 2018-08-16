@@ -2,13 +2,27 @@
 // Fonts
 @import url('https://fonts.googleapis.com/css?family=Nunito');
 
+@import url('//fonts.googleapis.com/earlyaccess/notosansjapanese.css');
+
 // Variables
 @import 'variables';
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
-.navbar-laravel {
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+//flatpickr
+@import '~flatpickr/dist/flatpickr.css';
+
+
+// Font Awesome
+@import '~font-awesome-scss/scss/font-awesome.scss';
+
+.header {
+  background-color: $indigo;
+  text-align: center;
+  font-size: 3em;
+}
+
+h1,h2,h3,h4,h5,h6 {
+  display: inline;
 }

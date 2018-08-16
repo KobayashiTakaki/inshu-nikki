@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Http\Request;
+use App\Inshu;
+use App\Http\Resources\InshuResource;
+use App\Http\Resources\InshuCollection;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +19,6 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+Route::get('/inshu', 'InshuController@showTotal');

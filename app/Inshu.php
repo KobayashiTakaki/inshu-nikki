@@ -11,6 +11,7 @@ class Inshu extends Model
    *
    * @var array
    */
+  protected $table = 'inshu';
   protected $fillable = [
     'user_id', 'date', 'kind', 'how', 'alc_amount'
   ];

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateInshuTable extends Migration
+class CreateAlcAmount extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,11 @@ class CreateInshuTable extends Migration
      */
     public function up()
     {
-        Schema::create('inshu', function (Blueprint $table) {
-          $table->integer('id')->unsigned()->autoIncrement();
-          $table->integer('user_id')->unsigned();
-          $table->string('date');
+        //
+        Schema::create('alc_amount', function (Blueprint $table) {
           $table->string('kind');
           $table->string('how');
           $table->integer('amount');
-          $table->timestamps();
-          //外部キー設定
-          $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
@@ -33,6 +28,7 @@ class CreateInshuTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('inshu');
+        //
+        Schema::dropIfExists('alc_amount');
     }
 }
