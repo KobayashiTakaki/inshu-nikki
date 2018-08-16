@@ -14103,3 +14103,43 @@ h6 {
   display: inline;
 }
 
+.inshu-total-row {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+.inshu-total-row-kind {
+  display: table-cell;
+  padding: 1em;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  vertical-align: bottom;
+}
+
+.inshu-total-row-amount {
+  display: table-cell;
+  padding: 1em;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  text-align: Right;
+  vertical-align: bottom;
+}
+
+.amount {
+  font-size: 1.5em;
+  color: #f6993f;
+}
+
+.error {
+  font-size: 0.8em;
+  color: #888888;
+  font-style: italic;
+}
+

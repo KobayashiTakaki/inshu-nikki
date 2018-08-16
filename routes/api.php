@@ -21,4 +21,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::get('/inshu', 'InshuController@showTotal');
+Route::middleware('auth:api')->get('/inshu', 'InshuController@showTotal');

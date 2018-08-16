@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('/', 'HomeController@show');
+Route::get('/', 'HomeController@index');
 
 Route::get('register', function(){
     return view('register');
@@ -25,11 +25,15 @@ Route::get('user',function () {
   });
 
 Route::get('show', 'UserController@show');
-
+/*
 Route::get('login', function() {
     return view('login');
 });
-
+*/
 Route::post('login', 'UserController@login');
 
 Route::get('logout', 'UserController@logout');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

@@ -1,25 +1,38 @@
 <template>
-  <div>
-    <input type="text" class="calendar" name="date" id="date" placeholder="日付" v-model="date">
-    <select name="kind" v-model="selectedKind" v-on:change="fetchHow">
-      <option v-for="kind in kinds" v-bind:value="kind.id">
-        {{kind.name}}
-      </option>
-    </select>
-    を
-    <select name="how" v-model="selectedHow">
-      <option v-for="how in hows" v-bind:value="how.id">
-        {{how.name}}
-      </option>
-    </select>
-    で
-    <input type="number" name="count" id="count" value="1" v-model="count">杯
-    <br>
-    <button type="submit" v-bind:disabled="isDisabled">送信</button>
-    <span v-for="error in errors">
-      {{error}}
-    </span>
-
+  <div class="card">
+    <div class="card-header">
+      <h5>飲酒登録</h5>
+    </div>
+    <div class="card-body">
+      <div class="form-group">
+        <input type="text" class="calendar" name="date" id="date" placeholder="日付" v-model="date">
+      </div>
+      <div class="form-group">
+        <select name="kind" v-model="selectedKind" v-on:change="fetchHow">
+          <option value='' disabled selected style='display:none;'>種類</option>
+          <option v-for="kind in kinds" v-bind:value="kind.id">
+            {{kind.name}}
+          </option>
+        </select>
+      </div>
+      を
+      <div class ="form-group">
+        <select name="how" v-model="selectedHow">
+          <option value='' disabled selected style='display:none;'>飲み方</option>
+          <option v-for="how in hows" v-bind:value="how.id">
+            {{how.name}}
+          </option>
+        </select>
+      </div>
+      で
+      <div class ="form-group">
+        <input class="col-1" type="number" name="count" id="count" value="1" v-model="count">杯
+      </div>
+      <button type="submit" v-bind:disabled="isDisabled">送信</button>
+      <span class="error" v-for="error in errors">
+        {{error}}
+      </span>
+    </div>
   </div>
 </template>
 <script>
@@ -66,6 +79,13 @@
         } else {
         }
         this.hows = tmp_hows;
+      },
+      setDateString: function() {
+        var myDate = new Date();
+        var yyyy = myDate.getFullYear();
+        var mm = ('00' + (myDate.getMonth()+1)).slice(-2);
+        var dd = ('00' + myDate.getDate()).slice(-2);
+        this.date =  yyyy + '/' + mm + '/' + dd;
       }
     },
     computed: {
@@ -93,7 +113,8 @@
       }
     },
     mounted() {
-      this.fetchHow()
+      this.fetchHow(),
+      this.setDateString()
     }
   }
 </script>

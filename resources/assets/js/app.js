@@ -16,6 +16,7 @@ window.Vue = require('vue');
  */
 
 Vue.component('post-inshu', require('./components/PostInshu.vue'));
+Vue.component('show-total', require('./components/ShowTotal.vue'));
 
 const app = new Vue({
     el: '#app'
