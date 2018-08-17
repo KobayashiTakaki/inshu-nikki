@@ -22,7 +22,7 @@ export default {
   },
   mounted () {
   axios
-    .get("/api/inshu")
+    .get("api/inshu")
     .then(response => (this.inshu_sum = response.data))
   }
 }
