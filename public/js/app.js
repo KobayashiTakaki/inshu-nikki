@@ -47736,7 +47736,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   mounted: function mounted() {
     var _this = this;
 
-    axios.get("/api/inshu").then(function (response) {
+    axios.get("api/inshu").then(function (response) {
       return _this.inshu_sum = response.data;
     });
   }
