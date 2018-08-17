@@ -14,8 +14,8 @@
             {{kind.name}}
           </option>
         </select>
+        <small>を</small>
       </div>
-      を
       <div class ="form-group">
         <select name="how" v-model="selectedHow">
           <option value='' disabled selected style='display:none;'>飲み方</option>
@@ -23,10 +23,11 @@
             {{how.name}}
           </option>
         </select>
+        <small>で</small>
       </div>
-      で
       <div class ="form-group">
-        <input class="col-1" type="number" name="count" id="count" value="1" v-model="count">杯
+        <input class="col-3" type="number" name="count" id="count" value="1" v-model="count">
+        <small>杯</small>
       </div>
       <button type="submit" v-bind:disabled="isDisabled">送信</button>
       <span class="error" v-for="error in errors">
@@ -40,7 +41,7 @@
     data() {
       return {
         date: '',
-        selectedKind: 'beer',
+        selectedKind: '',
         selectedHow: '',
         kinds: [
         {id: 'beer', name: 'ビール'},
@@ -55,6 +56,7 @@
     },
     methods: {
       fetchHow: function() {
+        this.selectedHow = '';
         var tmp_hows = [];
         if (this.selectedKind == 'beer') {
           tmp_hows = [
@@ -96,7 +98,7 @@
         } else if (!this.date.match(/[0-9]{4}\/[0-9]{2}\/[0-9]{2}/)){
           this.errors.push("日付をYYYY/MM/DD形式で入力してください");
         }
-        if(this.kind=='') {
+        if(this.selectedKind=='') {
           this.errors.push("種類を入力してください");
         }
         if(this.selectedHow=='') {

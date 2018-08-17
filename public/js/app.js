@@ -47383,12 +47383,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       date: '',
-      selectedKind: 'beer',
+      selectedKind: '',
       selectedHow: '',
       kinds: [{ id: 'beer', name: 'ビール' }, { id: 'whiskey', name: 'ウィスキー' }, { id: 'wine', name: 'ワイン' }, { id: 'sake', name: '日本酒' }],
       hows: [],
@@ -47399,6 +47400,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   methods: {
     fetchHow: function fetchHow() {
+      this.selectedHow = '';
       var tmp_hows = [];
       if (this.selectedKind == 'beer') {
         tmp_hows = [{ id: 'glass', name: 'グラス' }, { id: 'mug_midium', name: '中ジョッキ' }, { id: 'mug_large', name: '大ジョッキ' }];
@@ -47427,7 +47429,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       } else if (!this.date.match(/[0-9]{4}\/[0-9]{2}\/[0-9]{2}/)) {
         this.errors.push("日付をYYYY/MM/DD形式で入力してください");
       }
-      if (this.kind == '') {
+      if (this.selectedKind == '') {
         this.errors.push("種類を入力してください");
       }
       if (this.selectedHow == '') {
@@ -47541,9 +47543,11 @@ var render = function() {
               })
             ],
             2
-          )
+          ),
+          _vm._v(" "),
+          _c("small", [_vm._v("を")])
         ]),
-        _vm._v("\n    を\n    "),
+        _vm._v(" "),
         _c("div", { staticClass: "form-group" }, [
           _c(
             "select",
@@ -47590,9 +47594,11 @@ var render = function() {
               })
             ],
             2
-          )
+          ),
+          _vm._v(" "),
+          _c("small", [_vm._v("で")])
         ]),
-        _vm._v("\n    で\n    "),
+        _vm._v(" "),
         _c("div", { staticClass: "form-group" }, [
           _c("input", {
             directives: [
@@ -47603,6 +47609,7 @@ var render = function() {
                 expression: "count"
               }
             ],
+            staticClass: "col-3",
             attrs: { type: "number", name: "count", id: "count", value: "1" },
             domProps: { value: _vm.count },
             on: {
@@ -47614,7 +47621,8 @@ var render = function() {
               }
             }
           }),
-          _vm._v("杯\n    ")
+          _vm._v(" "),
+          _c("small", [_vm._v("杯")])
         ]),
         _vm._v(" "),
         _c("button", { attrs: { type: "submit", disabled: _vm.isDisabled } }, [
