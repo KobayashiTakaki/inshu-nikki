@@ -12,6 +12,8 @@
 */
 
 Route::get('/', function(){
+    Auth::loginUsingId(1);
+    Auth::user()->update(['api_token' => str_random(60)]);
     return view('home');
   });
 
