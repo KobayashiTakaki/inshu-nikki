@@ -16,28 +16,28 @@ Route::get('/', function(){
     Auth::user()->update(['api_token' => str_random(60)]);
     return view('home');
   });
-
+/*
 Route::get('register', function(){
     return view('register');
   });
 Route::post('register','UserController@register');
-
+*/
 Route::post('post', 'InshuController@post');
 
 Route::get('user',function () {
     return view('user',['name' => 'taro', 'age' => '23']);
   });
 
-Route::get('show', 'UserController@show');
+//Route::get('show', 'UserController@show');
 /*
 Route::get('login', function() {
     return view('login');
 });
 */
-Route::post('login', 'UserController@login');
+//Route::post('login', 'UserController@login');
 
-Route::get('logout', 'UserController@logout');
+//Route::get('logout', 'UserController@logout');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+//Route::get('/home', 'HomeController@index')->name('home');

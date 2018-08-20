@@ -9,7 +9,6 @@
           <post-inshu></post-inshu>
         </form>
         <show-total></show-total>
-        <a href="show">セッション</a>
       </div>
     </div>
 </div>
