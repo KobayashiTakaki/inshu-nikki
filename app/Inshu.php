@@ -13,6 +13,6 @@ class Inshu extends Model
    */
   protected $table = 'inshu';
   protected $fillable = [
-    'user_id', 'date', 'kind', 'how', 'alc_amount'
+    'user_id', 'date', 'kind', 'how', 'alc_amount', 'count'
   ];
 }

@@ -22,27 +22,22 @@ class InshuController extends Controller
   */
 
   public function post(Request $request){
-    $kind = $request->input('kind');
-    $how = $request->input('how');
-    $count = $request->input('count');
-
     if(null === $count){
       $count = 1;
     }
 
-    $amount = alc_amount::where('kind', $kind)->where('how', $how)
+    $amount = alc_amount::where('kind', $request->input('kind'))->where('how', $request->input('how'))
                     ->first()
                     ->amount;
 
-    for ($i = 0; $i < $count; $i++){
-      $inshu = new Inshu();
-      $inshu->user_id = Auth::id();
-      $inshu->date =$request->input('date');
-      $inshu->kind = $kind;
-      $inshu->how = $how;
-      $inshu->amount = $amount;
-      $inshu->save();
-    }
+    $inshu = new Inshu();
+    $inshu->user_id = Auth::id();
+    $inshu->date = $request->input('date');
+    $inshu->kind = $kind;
+    $inshu->how = $how;
+    $inshu->amount = $amount;
+    $inshu->count = $count;
+    $inshu->save();
 
     return redirect('/');
   }
