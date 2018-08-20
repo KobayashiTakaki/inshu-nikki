@@ -53,7 +53,12 @@ class InshuController extends Controller
         $kinds = $inshus->unique('kind')->pluck('kind');
 
         foreach ($kinds as $kind) {
-          $amount_sum = $inshus->where('kind', $kind)->sum('amount');
+          $amount_sum = 0;
+          foreach ($inshus as $inshu) {
+            $amount = $inshu->amount;
+            $count = $inshu->count;
+            $amount_sum += $amount*$count;
+          }
           array_push($inshu_sum, ['kind' => $kind, 'amount' => $amount_sum]);
         }
 

@@ -5,8 +5,8 @@
     </div>
     <div class="card-body">
       <div class="form-group">
-        <input type="text" class="calendar" name="date" id="date" placeholder="日付" v-model="date">
-        <small class="text-muted" v-if="dateMsg">{{dateMsg}}</small>
+        <input type="text" class="calendar" name="date" id="date" placeholder="日付" v-model="date" v-on:change="checkDate">
+        <small class="text-muted" v-for="dateMsg in dateMsgs">{{dateMsg}}</small>
       </div>
       <div class="form-group">
         <select name="kind" v-model="selectedKind" v-on:change="fetchHow">
@@ -16,24 +16,24 @@
           </option>
         </select>
         <small>を</small>
+        <small class="text-muted" v-for="kindMsg in kindMsgs">{{kindMsg}}</small>
       </div>
       <div class ="form-group">
-        <select name="how" v-model="selectedHow">
+        <select name="how" v-model="selectedHow" v-on:change="checkHow">
           <option value='' disabled selected style='display:none;'>飲み方</option>
           <option v-for="how in hows" v-bind:value="how.id">
             {{how.name}}
           </option>
         </select>
         <small>で</small>
+        <small class="text-muted" v-for="howMsg in howMsgs">{{howMsg}}</small>
       </div>
       <div class ="form-group">
-        <input class="col-3" type="number" name="count" id="count" value="1" v-model="count" v-on:change="checkCount">
+        <input class="col-3" type="number" min="1" name="count" id="count" value="1" v-model="count" v-on:change="checkCount">
         <small>杯</small>
+        <small class="text-muted" v-for="countMsg in countMsgs">{{countMsg}}</small>
       </div>
       <button type="submit" v-bind:disabled="isDisabled">送信</button>
-      <span class="error" v-for="error in errors">
-        {{error}}
-      </span>
     </div>
   </div>
 </template>
@@ -42,7 +42,6 @@
     data() {
       return {
         date: '',
-        dateMsg: null,
         selectedKind: '',
         selectedHow: '',
         kinds: [
@@ -53,7 +52,16 @@
         ],
         hows: [],
         count: 1,
-        errors: []
+        countMsgs: [],
+        errors: [],
+        dateErr: true,
+        kindErr: true,
+        howErr: true,
+        countErr: true,
+        dateMsgs: [],
+        kindMsgs: [],
+        howMsgs: [],
+        countMsgs: []
       }
     },
     methods: {
@@ -83,6 +91,7 @@
         } else {
         }
         this.hows = tmp_hows;
+        this.checkKind();
       },
       setDateString: function() {
         var myDate = new Date();
@@ -91,40 +100,62 @@
         var dd = ('00' + myDate.getDate()).slice(-2);
         this.date =  yyyy + '/' + mm + '/' + dd;
       },
+      checkDate: function () {
+        this.dateMsgs = [];
+        if (this.date == '') {
+          this.dateMsgs.push('日付を入力してください');
+          this.dateErr = true;
+        } else {
+          this.dateErr = false;
+        }
+      },
+      checkKind: function () {
+        this.kindMsgs = [];
+        if (this.selectedKind == '') {
+          this.kindMsgs.push('種類を入力してください');
+          this.kindErr = true;
+        } else {
+          this.kindErr = false;
+        }
+      },
+      checkHow: function () {
+        this.howMsgs = [];
+        if (this.selectedHow == '') {
+          this.howMsgs.push('飲み方を入力してください');
+          this.howErr = true;
+        } else {
+          this.howErr = false;
+        }
+      },
       checkCount: function () {
-        if (this.count > 10) {
-          this.isDisabled = true;
-
+        this.countMsgs = [];
+        if (0 > this.count || 10 < this.count) {
+          this.countMsgs.push('嘘でしょ？(10以下にしてください)');
+          this.countErr = true;
+        } else if (this.count == '') {
+          this.countMsgs.push('数を入力してください');
+          this.countErr = true;
+        } else {
+          this.countErr = false;
         }
       }
     },
     computed: {
       isDisabled: function () {
-        this.errors = [];
-        if(this.date=='') {
-          this.dateMsg = '日付を入力してください';
-        } else if (!this.date.match(/[0-9]{4}\/[0-9]{2}\/[0-9]{2}/)){
-          this.errors.push("日付をYYYY/MM/DD形式で入力してください");
-        }
-        if(this.selectedKind=='') {
-          this.errors.push("種類を入力してください");
-        }
-        if(this.selectedHow=='') {
-          this.errors.push("飲み方を選択してください");
-        }
-        if(this.count=='') {
-          this.errors.push("数を入力してください");
-        }
-        if(!this.errors.length){
-          return false;
-        } else {
+        if (this.dateErr || this.kindErr || this.howErr || this.countErr) {
           return true;
+        } else {
+          return false;
         }
       }
     },
     mounted() {
       this.fetchHow(),
-      this.setDateString()
+      this.setDateString(),
+      this.checkDate(),
+      this.checkKind(),
+      this.checkHow(),
+      this.checkCount()
     }
   }
 </script>
