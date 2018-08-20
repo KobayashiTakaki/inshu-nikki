@@ -46,10 +46,10 @@ class InshuController extends Controller
   public function showTotal(Request $request) {
 
     $inshus = Inshu::where('user_id', Auth::id())->get();
-    $inshu_sum =[];
-    $kinds = $inshus->unique('kind')->pluck('kind');
-
     if ($kinds !== null) {
+      $inshu_sum =[];
+      $kinds = $inshus->unique('kind')->pluck('kind');
+      
       foreach ($kinds as $kind) {
         $amount_sum = $inshus->where('kind', $kind)->sum('amount');
         array_push($inshu_sum, ['kind' => $kind, 'amount' => $amount_sum]);
