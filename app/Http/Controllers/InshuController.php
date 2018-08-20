@@ -54,7 +54,8 @@ class InshuController extends Controller
 
         foreach ($kinds as $kind) {
           $amount_sum = 0;
-          foreach ($inshus as $inshu) {
+          $inshus_single = $inshus->where('kind', $kind);
+          foreach ($inshus_single as $inshu) {
             $amount = $inshu->amount;
             $count = $inshu->count;
             $amount_sum += $amount*$count;

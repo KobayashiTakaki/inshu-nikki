@@ -47387,14 +47387,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -47469,8 +47461,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     checkCount: function checkCount() {
       this.countMsgs = [];
-      if (this.count > 10) {
-        this.countMsgs.push('嘘でしょ？');
+      if (0 > this.count || 10 < this.count) {
+        this.countMsgs.push('嘘でしょ？(10以下にしてください)');
         this.countErr = true;
       } else if (this.count == '') {
         this.countMsgs.push('数を入力してください');
@@ -47505,244 +47497,226 @@ var render = function() {
   return _c("div", { staticClass: "card" }, [
     _vm._m(0),
     _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "card-body" },
-      [
-        _c(
-          "div",
-          { staticClass: "form-group" },
-          [
-            _c("input", {
+    _c("div", { staticClass: "card-body" }, [
+      _c(
+        "div",
+        { staticClass: "form-group" },
+        [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.date,
+                expression: "date"
+              }
+            ],
+            staticClass: "calendar",
+            attrs: {
+              type: "text",
+              name: "date",
+              id: "date",
+              placeholder: "日付"
+            },
+            domProps: { value: _vm.date },
+            on: {
+              change: _vm.checkDate,
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.date = $event.target.value
+              }
+            }
+          }),
+          _vm._v(" "),
+          _vm._l(_vm.dateMsgs, function(dateMsg) {
+            return _c("small", { staticClass: "text-muted" }, [
+              _vm._v(_vm._s(dateMsg))
+            ])
+          })
+        ],
+        2
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "form-group" },
+        [
+          _c(
+            "select",
+            {
               directives: [
                 {
                   name: "model",
                   rawName: "v-model",
-                  value: _vm.date,
-                  expression: "date"
+                  value: _vm.selectedKind,
+                  expression: "selectedKind"
                 }
               ],
-              staticClass: "calendar",
-              attrs: {
-                type: "text",
-                name: "date",
-                id: "date",
-                placeholder: "日付"
-              },
-              domProps: { value: _vm.date },
+              attrs: { name: "kind" },
               on: {
-                change: _vm.checkDate,
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.date = $event.target.value
-                }
+                change: [
+                  function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.selectedKind = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
+                  },
+                  _vm.fetchHow
+                ]
               }
-            }),
-            _vm._v(" "),
-            _vm._l(_vm.dateMsgs, function(dateMsg) {
-              return _c("small", { staticClass: "text-muted" }, [
-                _vm._v(_vm._s(dateMsg))
-              ])
-            })
-          ],
-          2
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "form-group" },
-          [
-            _c(
-              "select",
-              {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.selectedKind,
-                    expression: "selectedKind"
-                  }
-                ],
-                attrs: { name: "kind" },
-                on: {
-                  change: [
-                    function($event) {
-                      var $$selectedVal = Array.prototype.filter
-                        .call($event.target.options, function(o) {
-                          return o.selected
-                        })
-                        .map(function(o) {
-                          var val = "_value" in o ? o._value : o.value
-                          return val
-                        })
-                      _vm.selectedKind = $event.target.multiple
-                        ? $$selectedVal
-                        : $$selectedVal[0]
-                    },
-                    _vm.fetchHow
-                  ]
-                }
-              },
-              [
-                _c(
-                  "option",
-                  {
-                    staticStyle: { display: "none" },
-                    attrs: { value: "", disabled: "", selected: "" }
-                  },
-                  [_vm._v("種類")]
-                ),
-                _vm._v(" "),
-                _vm._l(_vm.kinds, function(kind) {
-                  return _c("option", { domProps: { value: kind.id } }, [
-                    _vm._v("\n          " + _vm._s(kind.name) + "\n        ")
-                  ])
-                })
-              ],
-              2
-            ),
-            _vm._v(" "),
-            _c("small", [_vm._v("を")]),
-            _vm._v(" "),
-            _vm._l(_vm.kindMsgs, function(kindMsg) {
-              return _c("small", { staticClass: "text-muted" }, [
-                _vm._v(_vm._s(kindMsg))
-              ])
-            })
-          ],
-          2
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "form-group" },
-          [
-            _c(
-              "select",
-              {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.selectedHow,
-                    expression: "selectedHow"
-                  }
-                ],
-                attrs: { name: "how" },
-                on: {
-                  change: [
-                    function($event) {
-                      var $$selectedVal = Array.prototype.filter
-                        .call($event.target.options, function(o) {
-                          return o.selected
-                        })
-                        .map(function(o) {
-                          var val = "_value" in o ? o._value : o.value
-                          return val
-                        })
-                      _vm.selectedHow = $event.target.multiple
-                        ? $$selectedVal
-                        : $$selectedVal[0]
-                    },
-                    _vm.checkHow
-                  ]
-                }
-              },
-              [
-                _c(
-                  "option",
-                  {
-                    staticStyle: { display: "none" },
-                    attrs: { value: "", disabled: "", selected: "" }
-                  },
-                  [_vm._v("飲み方")]
-                ),
-                _vm._v(" "),
-                _vm._l(_vm.hows, function(how) {
-                  return _c("option", { domProps: { value: how.id } }, [
-                    _vm._v("\n          " + _vm._s(how.name) + "\n        ")
-                  ])
-                })
-              ],
-              2
-            ),
-            _vm._v(" "),
-            _c("small", [_vm._v("で")]),
-            _vm._v(" "),
-            _vm._l(_vm.howMsgs, function(howMsg) {
-              return _c("small", { staticClass: "text-muted" }, [
-                _vm._v(_vm._s(howMsg))
-              ])
-            })
-          ],
-          2
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "form-group" },
-          [
-            _c("input", {
+            },
+            [
+              _c(
+                "option",
+                {
+                  staticStyle: { display: "none" },
+                  attrs: { value: "", disabled: "", selected: "" }
+                },
+                [_vm._v("種類")]
+              ),
+              _vm._v(" "),
+              _vm._l(_vm.kinds, function(kind) {
+                return _c("option", { domProps: { value: kind.id } }, [
+                  _vm._v("\n          " + _vm._s(kind.name) + "\n        ")
+                ])
+              })
+            ],
+            2
+          ),
+          _vm._v(" "),
+          _c("small", [_vm._v("を")]),
+          _vm._v(" "),
+          _vm._l(_vm.kindMsgs, function(kindMsg) {
+            return _c("small", { staticClass: "text-muted" }, [
+              _vm._v(_vm._s(kindMsg))
+            ])
+          })
+        ],
+        2
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "form-group" },
+        [
+          _c(
+            "select",
+            {
               directives: [
                 {
                   name: "model",
                   rawName: "v-model",
-                  value: _vm.count,
-                  expression: "count"
+                  value: _vm.selectedHow,
+                  expression: "selectedHow"
                 }
               ],
-              staticClass: "col-3",
-              attrs: { type: "number", name: "count", id: "count", value: "1" },
-              domProps: { value: _vm.count },
+              attrs: { name: "how" },
               on: {
-                change: _vm.checkCount,
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.count = $event.target.value
-                }
+                change: [
+                  function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.selectedHow = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
+                  },
+                  _vm.checkHow
+                ]
               }
-            }),
-            _vm._v(" "),
-            _c("small", [_vm._v("杯")]),
-            _vm._v(" "),
-            _vm._l(_vm.countMsgs, function(countMsg) {
-              return _c("small", { staticClass: "text-muted" }, [
-                _vm._v(_vm._s(countMsg))
-              ])
-            })
-          ],
-          2
-        ),
-        _vm._v(" "),
-        _c("button", { attrs: { type: "submit", disabled: _vm.isDisabled } }, [
-          _vm._v("送信")
-        ]),
-        _vm._v(" "),
-        _vm._l(_vm.errors, function(error) {
-          return _c("span", { staticClass: "error" }, [
-            _vm._v("\n      " + _vm._s(error) + "\n    ")
-          ])
-        }),
-        _vm._v(
-          "\n    " +
-            _vm._s(_vm.dateErr) +
-            "\n    " +
-            _vm._s(_vm.kindErr) +
-            "\n    " +
-            _vm._s(_vm.howErr) +
-            "\n    " +
-            _vm._s(_vm.countErr) +
-            "\n    " +
-            _vm._s(_vm.selectedHow) +
-            "\n  "
-        )
-      ],
-      2
-    )
+            },
+            [
+              _c(
+                "option",
+                {
+                  staticStyle: { display: "none" },
+                  attrs: { value: "", disabled: "", selected: "" }
+                },
+                [_vm._v("飲み方")]
+              ),
+              _vm._v(" "),
+              _vm._l(_vm.hows, function(how) {
+                return _c("option", { domProps: { value: how.id } }, [
+                  _vm._v("\n          " + _vm._s(how.name) + "\n        ")
+                ])
+              })
+            ],
+            2
+          ),
+          _vm._v(" "),
+          _c("small", [_vm._v("で")]),
+          _vm._v(" "),
+          _vm._l(_vm.howMsgs, function(howMsg) {
+            return _c("small", { staticClass: "text-muted" }, [
+              _vm._v(_vm._s(howMsg))
+            ])
+          })
+        ],
+        2
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "form-group" },
+        [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.count,
+                expression: "count"
+              }
+            ],
+            staticClass: "col-3",
+            attrs: {
+              type: "number",
+              min: "1",
+              name: "count",
+              id: "count",
+              value: "1"
+            },
+            domProps: { value: _vm.count },
+            on: {
+              change: _vm.checkCount,
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.count = $event.target.value
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c("small", [_vm._v("杯")]),
+          _vm._v(" "),
+          _vm._l(_vm.countMsgs, function(countMsg) {
+            return _c("small", { staticClass: "text-muted" }, [
+              _vm._v(_vm._s(countMsg))
+            ])
+          })
+        ],
+        2
+      ),
+      _vm._v(" "),
+      _c("button", { attrs: { type: "submit", disabled: _vm.isDisabled } }, [
+        _vm._v("送信")
+      ])
+    ])
   ])
 }
 var staticRenderFns = [
