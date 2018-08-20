@@ -20,6 +20,7 @@ class CreateInshuTable extends Migration
           $table->string('kind');
           $table->string('how');
           $table->integer('amount');
+          $table->integer('count');
           $table->timestamps();
           //外部キー設定
           $table->foreign('user_id')->references('id')->on('users');
