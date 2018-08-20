@@ -47813,6 +47813,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       inshu_sum: "null"
     };
   },
+
+  methods: {
+    convKindDisp: function convKindDisp(kind) {
+      switch (kind) {
+        case 'beer':
+          return 'ビール';
+          break;
+        case 'whiskey':
+          return 'ウィスキー';
+          break;
+        case 'wine':
+          return 'ワイン';
+          break;
+        case 'sake':
+          return '日本酒';
+          break;
+        default:
+          return '';
+      }
+    }
+  },
   mounted: function mounted() {
     var _this = this;
 
@@ -47840,7 +47861,7 @@ var render = function() {
         _vm._l(_vm.inshu_sum, function(inshu) {
           return _c("div", { staticClass: "inshu-total-row" }, [
             _c("div", { staticClass: "inshu-total-row-kind" }, [
-              _vm._v(_vm._s(inshu.kind))
+              _vm._v(_vm._s(_vm.convKindDisp(inshu.kind)))
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "inshu-total-row-amount" }, [
