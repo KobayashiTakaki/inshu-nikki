@@ -46,8 +46,10 @@ class InshuController extends Controller
   public function showTotal(Request $request) {
     try {
       $inshus = Inshu::where('user_id', Auth::id())->get();
+      $inshu_sum =[];
+
       if ($inshus->count() > 0) {
-        $inshu_sum =[];
+
         $kinds = $inshus->unique('kind')->pluck('kind');
 
         foreach ($kinds as $kind) {
