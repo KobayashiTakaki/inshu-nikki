@@ -6,6 +6,7 @@
     <div class="card-body">
       <div class="form-group">
         <input type="text" class="calendar" name="date" id="date" placeholder="日付" v-model="date">
+        <small class="text-muted" v-if="dateMsg">dateMsg</small>
       </div>
       <div class="form-group">
         <select name="kind" v-model="selectedKind" v-on:change="fetchHow">
@@ -26,7 +27,7 @@
         <small>で</small>
       </div>
       <div class ="form-group">
-        <input class="col-3" type="number" name="count" id="count" value="1" v-model="count">
+        <input class="col-3" type="number" name="count" id="count" value="1" v-model="count" v-on:change="checkCount">
         <small>杯</small>
       </div>
       <button type="submit" v-bind:disabled="isDisabled">送信</button>
@@ -41,6 +42,7 @@
     data() {
       return {
         date: '',
+        dateMsg: null,
         selectedKind: '',
         selectedHow: '',
         kinds: [
@@ -88,13 +90,19 @@
         var mm = ('00' + (myDate.getMonth()+1)).slice(-2);
         var dd = ('00' + myDate.getDate()).slice(-2);
         this.date =  yyyy + '/' + mm + '/' + dd;
+      },
+      checkCount: function () {
+        if (this.count > 10) {
+          this.isDisabled = true;
+
+        }
       }
     },
     computed: {
       isDisabled: function () {
         this.errors = [];
         if(this.date=='') {
-          this.errors.push("日付を入力してください");
+          this.dateMsg = '日付を入力してください';
         } else if (!this.date.match(/[0-9]{4}\/[0-9]{2}\/[0-9]{2}/)){
           this.errors.push("日付をYYYY/MM/DD形式で入力してください");
         }

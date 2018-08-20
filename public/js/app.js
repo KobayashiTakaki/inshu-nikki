@@ -47384,11 +47384,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       date: '',
+      dateMsg: null,
       selectedKind: '',
       selectedHow: '',
       kinds: [{ id: 'beer', name: 'ビール' }, { id: 'whiskey', name: 'ウィスキー' }, { id: 'wine', name: 'ワイン' }, { id: 'sake', name: '日本酒' }],
@@ -47419,13 +47421,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var mm = ('00' + (myDate.getMonth() + 1)).slice(-2);
       var dd = ('00' + myDate.getDate()).slice(-2);
       this.date = yyyy + '/' + mm + '/' + dd;
+    },
+    checkCount: function checkCount() {
+      if (this.count > 10) {
+        this.isDisabled = true;
+      }
     }
   },
   computed: {
     isDisabled: function isDisabled() {
       this.errors = [];
       if (this.date == '') {
-        this.errors.push("日付を入力してください");
+        this.dateMsg = '日付を入力してください';
       } else if (!this.date.match(/[0-9]{4}\/[0-9]{2}\/[0-9]{2}/)) {
         this.errors.push("日付をYYYY/MM/DD形式で入力してください");
       }
@@ -47491,7 +47498,11 @@ var render = function() {
                 _vm.date = $event.target.value
               }
             }
-          })
+          }),
+          _vm._v(" "),
+          _vm.dateMsg
+            ? _c("small", { staticClass: "text-muted" }, [_vm._v("dateMsg")])
+            : _vm._e()
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "form-group" }, [
@@ -47613,6 +47624,7 @@ var render = function() {
             attrs: { type: "number", name: "count", id: "count", value: "1" },
             domProps: { value: _vm.count },
             on: {
+              change: _vm.checkCount,
               input: function($event) {
                 if ($event.target.composing) {
                   return
