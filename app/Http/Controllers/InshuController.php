@@ -49,7 +49,7 @@ class InshuController extends Controller
     if ($kinds !== null) {
       $inshu_sum =[];
       $kinds = $inshus->unique('kind')->pluck('kind');
-      
+
       foreach ($kinds as $kind) {
         $amount_sum = $inshus->where('kind', $kind)->sum('amount');
         array_push($inshu_sum, ['kind' => $kind, 'amount' => $amount_sum]);
@@ -58,10 +58,12 @@ class InshuController extends Controller
       foreach ((array) $inshu_sum as $key => $value) {
         $sort[$key] = $value['amount'];
       }
-
       array_multisort($sort, SORT_DESC, $inshu_sum);
+      return $inshu_sum;
+    } else {
+      return '';
     }
-    return $inshu_sum;
+
 
     //return new InshuCollection(Inshu::where('user_id', $user_id));
   }
