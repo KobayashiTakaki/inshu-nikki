@@ -6,7 +6,7 @@
     <div class="card-body">
       <div class="form-group">
         <input type="text" class="calendar" name="date" id="date" placeholder="日付" v-model="date">
-        <small class="text-muted" v-if="dateMsg">dateMsg</small>
+        <small class="text-muted" v-if="dateMsg">{{dateMsg}}</small>
       </div>
       <div class="form-group">
         <select name="kind" v-model="selectedKind" v-on:change="fetchHow">

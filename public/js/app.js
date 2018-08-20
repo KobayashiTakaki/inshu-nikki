@@ -47501,7 +47501,9 @@ var render = function() {
           }),
           _vm._v(" "),
           _vm.dateMsg
-            ? _c("small", { staticClass: "text-muted" }, [_vm._v("dateMsg")])
+            ? _c("small", { staticClass: "text-muted" }, [
+                _vm._v(_vm._s(_vm.dateMsg))
+              ])
             : _vm._e()
         ]),
         _vm._v(" "),
