@@ -22,6 +22,7 @@ class InshuController extends Controller
   */
 
   public function post(Request $request){
+    $count = $request->input('count');
     if(null === $count){
       $count = 1;
     }
