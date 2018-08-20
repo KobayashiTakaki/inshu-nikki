@@ -34,8 +34,8 @@ class InshuController extends Controller
     $inshu = new Inshu();
     $inshu->user_id = Auth::id();
     $inshu->date = $request->input('date');
-    $inshu->kind = $kind;
-    $inshu->how = $how;
+    $inshu->kind = $request->input('kind');
+    $inshu->how = $request->input('how');
     $inshu->amount = $amount;
     $inshu->count = $count;
     $inshu->save();
