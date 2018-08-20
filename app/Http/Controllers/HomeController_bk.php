@@ -1,5 +1,5 @@
 <?php
-
+/*
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -24,14 +24,14 @@ class HomeController extends Controller
       $inshus = Inshu::where('user_id', $user_id)
                 ->get();
       //var_dump($kinds);
-      /*
+      
       foreach ($kinds as $kind) {
          $amount = Inshu::where('user_id', $user_id)
                     ->where('kind', $kind)
                     ->sum('amount');
         $inshus[$kind] = $amount;
       }
-      */
+
       $inshu_sum =[];
       $kinds = $inshus->unique('kind')->pluck('kind');
       foreach ($kinds as $kind) {
@@ -45,4 +45,5 @@ class HomeController extends Controller
 
       return view('home', compact('username','user_id', 'inshu_sum'));
     }
+    */
 }
