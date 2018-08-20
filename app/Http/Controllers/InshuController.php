@@ -44,27 +44,28 @@ class InshuController extends Controller
   }
 
   public function showTotal(Request $request) {
+    try {
+      $inshus = Inshu::where('user_id', Auth::id())->get();
+      if ($kinds !== null) {
+        $inshu_sum =[];
+        $kinds = $inshus->unique('kind')->pluck('kind');
 
-    $inshus = Inshu::where('user_id', Auth::id())->get();
-    if ($kinds !== null) {
-      $inshu_sum =[];
-      $kinds = $inshus->unique('kind')->pluck('kind');
+        foreach ($kinds as $kind) {
+          $amount_sum = $inshus->where('kind', $kind)->sum('amount');
+          array_push($inshu_sum, ['kind' => $kind, 'amount' => $amount_sum]);
+        }
 
-      foreach ($kinds as $kind) {
-        $amount_sum = $inshus->where('kind', $kind)->sum('amount');
-        array_push($inshu_sum, ['kind' => $kind, 'amount' => $amount_sum]);
+        foreach ((array) $inshu_sum as $key => $value) {
+          $sort[$key] = $value['amount'];
+        }
+        array_multisort($sort, SORT_DESC, $inshu_sum);
       }
 
-      foreach ((array) $inshu_sum as $key => $value) {
-        $sort[$key] = $value['amount'];
-      }
-      array_multisort($sort, SORT_DESC, $inshu_sum);
       return $inshu_sum;
-    } else {
-      return '';
+
+    } catch (Exception $e) {
+      return $e->getMessage();
     }
-
-
     //return new InshuCollection(Inshu::where('user_id', $user_id));
   }
 
