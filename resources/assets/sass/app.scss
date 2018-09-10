@@ -27,12 +27,13 @@ h1,h2,h3,h4,h5,h6 {
   display: inline;
 }
 
-.inshu-total-row {
+
+.inshu-row {
   display: flex;
   flex-direction: row;
 }
 
-.inshu-total-row-kind {
+.inshu-cell {
   display: table-cell;
   padding: 1em;
   flex-grow: 1;

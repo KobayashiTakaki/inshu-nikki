@@ -47806,11 +47806,38 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      inshu_sum: "null"
+      inshus: [],
+      inshuTotals: [],
+      dateFrom: '',
+      dateTo: '',
+      dispType: 'monthly'
     };
   },
 
@@ -47832,14 +47859,105 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         default:
           return '';
       }
+    },
+    changeDispType: function changeDispType(type) {
+      if (this.dispType === type) {
+        return;
+      }
+      this.dispType = type;
+      switch (type) {
+        case 'monthly':
+          this.getMonthlyInshus();
+          break;
+        case 'all':
+          this.getAllInshus();
+          break;
+        default:
+
+      }
+    },
+    getMonthlyInshus: function getMonthlyInshus() {
+      var _this = this;
+
+      var dt = new Date();
+      var yyyy = dt.getFullYear();
+      var mm = ('00' + (dt.getMonth() + 1)).slice(-2);
+      var ddFrom = '01';
+      var ddTo = ('00' + new Date(yyyy, parseInt(mm) + 1, 0).getDate()).slice(-2);
+      this.dateFrom = yyyy + '/' + mm + '/' + ddFrom;
+      this.dateTo = yyyy + '/' + mm + '/' + ddTo;
+      axios.get("api/inshu", {
+        params: {
+          dateFrom: this.dateFrom,
+          dateTo: this.dateTo
+        }
+      }).then(function (response) {
+        return _this.inshus = response.data;
+      });
+      console.log(this.inshus);
+      this.calcInshuTotal();
+    },
+    getAllInshus: function getAllInshus() {
+      var _this2 = this;
+
+      axios.get("api/inshu", {
+        params: {
+          dateFrom: '1900/01/01',
+          dateTo: '9999/12/31'
+        }
+      }).then(function (response) {
+        return _this2.inshus = response.data;
+      });
+      //console.log(this.inshus);
+    },
+    calcInshuTotal: function calcInshuTotal() {
+      this.inshuTotals = [];
+      var inshus = this.inshus;
+      var kinds = _.uniq(_.map(inshus, 'kind'));
+      // console.log(kinds);
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = kinds[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var kind = _step.value;
+
+          //console.log(kind);
+          var inshusSingle = _.filter(inshus, ['kind', kind]);
+          //console.log(inshusSingle);
+          _.forEach(inshusSingle, function (o) {
+            // console.log(o.amount);
+            // console.log(o.count);
+            o.amountTotal = o.amount * o.count;
+            //console.log(o.amountTotal);
+          });
+
+          //console.log(_.sumBy(inshusSingle, 'amountTotal'));
+
+          this.inshuTotals.push({ 'kind': kind, 'totalAmount': _.sumBy(inshusSingle, 'amountTotal') });
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      this.inshuTotals = _.sortBy(this.inshuTotals, ['totalAmount']).reverse();
+      //console.log(this.inshuTotals);
     }
   },
   mounted: function mounted() {
-    var _this = this;
-
-    axios.get("api/inshu").then(function (response) {
-      return _this.inshu_sum = response.data;
-    });
+    this.getMonthlyInshus();
   }
 });
 
@@ -47851,28 +47969,105 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "show_total card" }, [
-    _vm._m(0),
+  return _c("div", { staticClass: "show_total mt-2" }, [
+    _c("div", { staticClass: "nav my-2" }, [
+      _c("li", [
+        _c(
+          "a",
+          {
+            staticClass: "nav-link",
+            attrs: { href: "" },
+            on: {
+              click: function($event) {
+                $event.preventDefault()
+                _vm.changeDispType("monthly")
+              }
+            }
+          },
+          [_vm._v("今月の飲酒量")]
+        )
+      ]),
+      _vm._v(" "),
+      _c("li", [
+        _c(
+          "a",
+          {
+            staticClass: "nav-link",
+            attrs: { href: "" },
+            on: {
+              click: function($event) {
+                $event.preventDefault()
+                _vm.changeDispType("all")
+              }
+            }
+          },
+          [_vm._v("一覧")]
+        )
+      ])
+    ]),
     _vm._v(" "),
-    _c("div", { staticClass: "card-body" }, [
+    _c("div", { staticClass: "mt-2" }, [
       _c(
-        "div",
-        { staticClass: "inshu-total-table" },
-        _vm._l(_vm.inshu_sum, function(inshu) {
-          return _c("div", { staticClass: "inshu-total-row" }, [
-            _c("div", { staticClass: "inshu-total-row-kind" }, [
-              _vm._v(_vm._s(_vm.convKindDisp(inshu.kind)))
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "inshu-total-row-amount" }, [
-              _c("span", { staticClass: "amount" }, [
-                _vm._v(_vm._s(inshu.amount))
-              ]),
-              _vm._v("ml")
+        "table",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.dispType === "monthly",
+              expression: "dispType === 'monthly'"
+            }
+          ],
+          staticClass: "table table-sm"
+        },
+        [
+          _vm._m(0),
+          _vm._v(" "),
+          _vm._l(_vm.inshuTotals, function(inshuTotal) {
+            return _c("tr", [
+              _c("td", [_vm._v(_vm._s(inshuTotal.kind))]),
+              _vm._v(" "),
+              _c("td", [_vm._v(_vm._s(inshuTotal.totalAmount) + " ml")])
             ])
-          ])
-        })
-      )
+          })
+        ],
+        2
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "mt-2" }, [
+        _c(
+          "table",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.dispType === "all",
+                expression: "dispType === 'all'"
+              }
+            ],
+            staticClass: "table table-sm"
+          },
+          [
+            _vm._m(1),
+            _vm._v(" "),
+            _vm._l(_vm.inshus, function(inshu) {
+              return _c("tr", [
+                _c("td", [_vm._v(_vm._s(inshu.date))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(inshu.kind))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(inshu.how))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(inshu.amount) + "ml")]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(inshu.count))])
+              ])
+            })
+          ],
+          2
+        )
+      ])
     ])
   ])
 }
@@ -47881,8 +48076,26 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-header" }, [
-      _c("h5", [_vm._v("今月の飲酒量")])
+    return _c("tr", [
+      _c("th", { attrs: { scope: "col" } }, [_vm._v("種類")]),
+      _vm._v(" "),
+      _c("th", { attrs: { scope: "col" } }, [_vm._v("量")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [
+      _c("th", { attrs: { scope: "col" } }, [_vm._v("日付")]),
+      _vm._v(" "),
+      _c("th", { attrs: { scope: "col" } }, [_vm._v("種類")]),
+      _vm._v(" "),
+      _c("th", { attrs: { scope: "col" } }, [_vm._v("飲み方")]),
+      _vm._v(" "),
+      _c("th", { attrs: { scope: "col" } }, [_vm._v("量")]),
+      _vm._v(" "),
+      _c("th", { attrs: { scope: "col" } }, [_vm._v("杯")])
     ])
   }
 ]

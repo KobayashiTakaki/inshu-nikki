@@ -45,31 +45,42 @@ class InshuController extends Controller
 
   public function showTotal(Request $request) {
     try {
-      $inshus = Inshu::where('user_id', Auth::id())->get();
+      // $res = [
+      //   'dateFrom' => $request->dateFrom,
+      //   'dateTo' => $request->dateTo
+      // ];
+      // return $res;
+      $dateFrom = $request->dateFrom;
+      $dateTo = $request->dateTo;
+      $inshus = Inshu::where('user_id', Auth::id())
+                ->whereBetween('date', [$dateFrom, $dateTo])
+                ->get();
+
+      return $inshus;
       $inshu_sum =[];
 
-      if ($inshus->count() > 0) {
-
-        $kinds = $inshus->unique('kind')->pluck('kind');
-
-        foreach ($kinds as $kind) {
-          $amount_sum = 0;
-          $inshus_single = $inshus->where('kind', $kind);
-          foreach ($inshus_single as $inshu) {
-            $amount = $inshu->amount;
-            $count = $inshu->count;
-            $amount_sum += $amount*$count;
-          }
-          array_push($inshu_sum, ['kind' => $kind, 'amount' => $amount_sum]);
-        }
-
-        foreach ((array) $inshu_sum as $key => $value) {
-          $sort[$key] = $value['amount'];
-        }
-        array_multisort($sort, SORT_DESC, $inshu_sum);
-      }
-
-      return $inshu_sum;
+      // if ($inshus->count() > 0) {
+      //
+      //   $kinds = $inshus->unique('kind')->pluck('kind');
+      //
+      //   foreach ($kinds as $kind) {
+      //     $amount_sum = 0;
+      //     $inshus_single = $inshus->where('kind', $kind);
+      //     foreach ($inshus_single as $inshu) {
+      //       $amount = $inshu->amount;
+      //       $count = $inshu->count;
+      //       $amount_sum += $amount*$count;
+      //     }
+      //     array_push($inshu_sum, ['kind' => $kind, 'amount' => $amount_sum]);
+      //   }
+      //
+      //   foreach ((array) $inshu_sum as $key => $value) {
+      //     $sort[$key] = $value['amount'];
+      //   }
+      //   array_multisort($sort, SORT_DESC, $inshu_sum);
+      // }
+      //
+      // return $inshu_sum;
 
     } catch (Exception $e) {
       return $e->getMessage();

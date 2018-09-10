@@ -9,11 +9,6 @@
 
   <body>
     <h1>LOGIN</h1>
-
-    <form action="login" method="post"　autocomplete="off">
-      @csrf
-      <input type="text" name="email" placeholder="email">
-      <input type="submit" value="ログイン">
-    </form>
+    <button><a href="auth/twitter">twitter login</a></button>
   </body>
 </html>

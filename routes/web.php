@@ -12,8 +12,8 @@
 */
 
 Route::get('/', function(){
-    Auth::loginUsingId(1);
-    Auth::user()->update(['api_token' => str_random(60)]);
+    //Auth::loginUsingId(1);
+    //Auth::user()->update(['api_token' => str_random(60)]);
     return view('home');
   });
 /*
@@ -28,12 +28,10 @@ Route::get('user',function () {
     return view('user',['name' => 'taro', 'age' => '23']);
   });
 
-//Route::get('show', 'UserController@show');
-/*
-Route::get('login', function() {
-    return view('login');
-});
-*/
+Route::get('auth/twitter', 'Auth\LoginController@redirectToProvider');
+Route::get('auth/twitter/callback', 'Auth\LoginController@handleProviderCallback');
+//Route::get("auth/twitter/logout","Auth\LoginController@getLogout");
+
 //Route::post('login', 'UserController@login');
 
 //Route::get('logout', 'UserController@logout');

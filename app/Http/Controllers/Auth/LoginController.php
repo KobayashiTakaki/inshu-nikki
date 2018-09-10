@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use App\User;
+use Socialite;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -18,6 +21,45 @@ class LoginController extends Controller
     | to conveniently provide its functionality to your applications.
     |
     */
+
+    /**
+     * Twitterの認証ページヘユーザーをリダイレクト
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function redirectToProvider()
+    {
+        return Socialite::driver('twitter')->redirect();
+    }
+
+    /**
+     * Twitterからユーザー情報を取得
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function handleProviderCallback()
+    {
+        $user = Socialite::driver('twitter')->user();
+
+        // $user->token;
+        $authUser = $this->findOrCreateUser($user);
+        Auth::login($authUser, true);
+        Auth::user()->update(['api_token' => str_random(60)]);
+        return redirect('/');
+    }
+
+    private function findOrCreateUser($twitterUser){
+        $authUser = User::where('twitter_id', $twitterUser->id)->first();
+        if ($authUser){
+            return $authUser;
+        }
+        return User::create([
+            'name' => $twitterUser->name,
+            'twitter_id' => $twitterUser->id
+        ]);
+    }
+
+
 
     use AuthenticatesUsers;
 

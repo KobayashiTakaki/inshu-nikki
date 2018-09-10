@@ -14103,7 +14103,7 @@ h6 {
   display: inline;
 }
 
-.inshu-total-row {
+.inshu-row {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -14113,7 +14113,7 @@ h6 {
           flex-direction: row;
 }
 
-.inshu-total-row-kind {
+.inshu-cell {
   display: table-cell;
   padding: 1em;
   -webkit-box-flex: 1;
