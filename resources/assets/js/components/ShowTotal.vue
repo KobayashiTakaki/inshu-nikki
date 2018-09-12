@@ -1,11 +1,11 @@
 <template>
   <div class="show_total mt-2">
     <div class="nav my-2">
-      <li><a class="nav-link" href="" v-on:click.prevent="changeDispType('monthly')" v-bind:class="">今月の飲酒量</a></li>
+      <li><a class="nav-link" href="" v-on:click.prevent="changeDispType('monthly')">今月の飲酒量</a></li>
       <li><a class="nav-link" href="" v-on:click.prevent="changeDispType('all')">一覧</a></li>
     </div>
     <div class="mt-2">
-      <table class="table table-sm" v-show="dispType === 'monthly'">
+      <table class="table table-sm" v-if="dispType === 'monthly'">
         <tr>
           <th scope="col">種類</th>
           <th scope="col">量</th>
@@ -16,7 +16,7 @@
         </tr>
       </table>
       <div class="mt-2">
-        <table class="table table-sm" v-show="dispType === 'all'">
+        <table class="table table-sm" v-if="dispType === 'all'">
           <tr>
             <th scope="col">日付</th>
             <th scope="col">種類</th>
@@ -34,17 +34,20 @@
         </table>
       </div>
     </div>
+    <!-- {{ $data.inshus }}
+    {{ $data.inshuTotals }} -->
   </div>
 </template>
 <script>
 export default {
   data () {
     return {
-      inshus: [],
+      inshus: null,
       inshuTotals: [],
       dateFrom: '',
       dateTo: '',
-      dispType: 'monthly'
+      dispType: 'monthly',
+      someData: null
     }
   },
   methods: {
@@ -70,26 +73,31 @@ export default {
       if(this.dispType === type) {
         return;
       }
-      this.dispType = type;
       switch(type) {
         case 'monthly':
-          this.getMonthlyInshus();
+          this.showMonthlyInshus();
           break;
         case 'all':
           this.getAllInshus();
           break;
         default:
-
       }
+      this.dispType = type;
+    },
+    showMonthlyInshus: function(){
+      this.getMonthlyInshus();
+      this.calcInshuTotal();
     },
     getMonthlyInshus: function() {
-      var dt = new Date();
-      var yyyy = dt.getFullYear();
-      var mm = ('00' + (dt.getMonth()+1)).slice(-2);
-      var ddFrom = '01';
-      var ddTo = ('00' + new Date(yyyy,parseInt(mm)+1,0).getDate()).slice(-2);
+      let dt = new Date();
+      let yyyy = dt.getFullYear();
+      let mm = ('00' + (dt.getMonth()+1)).slice(-2);
+      let ddFrom = '01';
+      let ddTo = ('00' + new Date(yyyy,parseInt(mm)+1,0).getDate()).slice(-2);
       this.dateFrom = yyyy + '/' + mm + '/' + ddFrom;
       this.dateTo = yyyy + '/' + mm + '/' + ddTo;
+      console.log(this.dateFrom);
+      console.log(this.dateTo);
       axios
         .get("api/inshu", {
           params: {
@@ -97,9 +105,13 @@ export default {
             dateTo: this.dateTo
           }
         })
-        .then(response => (this.inshus = response.data));
-      console.log(this.inshus);
-      this.calcInshuTotal();
+        // .then(function (response){
+        //   inshusLocal = response.data;
+        // })
+        .then(response => {
+          this.inshus = response.data;
+          this.calcInshuTotal();
+        });
     },
     getAllInshus: function() {
       axios
@@ -109,17 +121,15 @@ export default {
             dateTo: '9999/12/31'
           }
         })
-        .then(response => (this.inshus = response.data));
-      //console.log(this.inshus);
+        .then(response => {this.inshus = response.data});
     },
     calcInshuTotal: function() {
-      this.inshuTotals = [];
       let inshus = this.inshus;
-      let kinds = _.uniq(_.map(inshus, 'kind'));
-      // console.log(kinds);
+      this.inshuTotals = [];
+      let monthlyInshus = inshus;
+      let kinds = _.uniq(_.map(monthlyInshus, 'kind'));
       for(let kind of kinds) {
-        //console.log(kind);
-        let inshusSingle = _.filter(inshus, ['kind', kind]);
+        let inshusSingle = _.filter(monthlyInshus, ['kind', kind]);
         //console.log(inshusSingle);
         _.forEach(inshusSingle, function(o) {
           // console.log(o.amount);
@@ -127,17 +137,15 @@ export default {
           o.amountTotal = o.amount * o.count;
           //console.log(o.amountTotal);
         });
-
-        //console.log(_.sumBy(inshusSingle, 'amountTotal'));
-
         this.inshuTotals.push({'kind': kind, 'totalAmount': _.sumBy(inshusSingle, 'amountTotal')});
       }
       this.inshuTotals = _.sortBy(this.inshuTotals, ['totalAmount']).reverse();
-      //console.log(this.inshuTotals);
     }
   },
   mounted() {
-    this.getMonthlyInshus();
+    console.log('mounted');
+    this.showMonthlyInshus();
+    console.log(this.inshus);
   }
 }
 </script>

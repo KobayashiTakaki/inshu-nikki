@@ -4,9 +4,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-          <button class="btn btn-primary">
-            <a href="auth/twitter">twitter login</a>
-          </button>
+            <a role="button" href="auth/twitter">Login with Twitter</a>
         </div>
     </div>
 </div>

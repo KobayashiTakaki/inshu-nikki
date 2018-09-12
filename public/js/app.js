@@ -47829,15 +47829,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      inshus: [],
+      inshus: null,
       inshuTotals: [],
       dateFrom: '',
       dateTo: '',
-      dispType: 'monthly'
+      dispType: 'monthly',
+      someData: null
     };
   },
 
@@ -47864,17 +47867,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       if (this.dispType === type) {
         return;
       }
-      this.dispType = type;
       switch (type) {
         case 'monthly':
-          this.getMonthlyInshus();
+          this.showMonthlyInshus();
           break;
         case 'all':
           this.getAllInshus();
           break;
         default:
-
       }
+      this.dispType = type;
+    },
+    showMonthlyInshus: function showMonthlyInshus() {
+      this.getMonthlyInshus();
+      this.calcInshuTotal();
     },
     getMonthlyInshus: function getMonthlyInshus() {
       var _this = this;
@@ -47886,16 +47892,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var ddTo = ('00' + new Date(yyyy, parseInt(mm) + 1, 0).getDate()).slice(-2);
       this.dateFrom = yyyy + '/' + mm + '/' + ddFrom;
       this.dateTo = yyyy + '/' + mm + '/' + ddTo;
+      console.log(this.dateFrom);
+      console.log(this.dateTo);
       axios.get("api/inshu", {
         params: {
           dateFrom: this.dateFrom,
           dateTo: this.dateTo
         }
-      }).then(function (response) {
-        return _this.inshus = response.data;
+      })
+      // .then(function (response){
+      //   inshusLocal = response.data;
+      // })
+      .then(function (response) {
+        _this.inshus = response.data;
+        _this.calcInshuTotal();
       });
-      console.log(this.inshus);
-      this.calcInshuTotal();
     },
     getAllInshus: function getAllInshus() {
       var _this2 = this;
@@ -47906,15 +47917,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           dateTo: '9999/12/31'
         }
       }).then(function (response) {
-        return _this2.inshus = response.data;
+        _this2.inshus = response.data;
       });
-      //console.log(this.inshus);
     },
     calcInshuTotal: function calcInshuTotal() {
-      this.inshuTotals = [];
       var inshus = this.inshus;
-      var kinds = _.uniq(_.map(inshus, 'kind'));
-      // console.log(kinds);
+      this.inshuTotals = [];
+      var monthlyInshus = inshus;
+      var kinds = _.uniq(_.map(monthlyInshus, 'kind'));
       var _iteratorNormalCompletion = true;
       var _didIteratorError = false;
       var _iteratorError = undefined;
@@ -47923,8 +47933,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         for (var _iterator = kinds[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
           var kind = _step.value;
 
-          //console.log(kind);
-          var inshusSingle = _.filter(inshus, ['kind', kind]);
+          var inshusSingle = _.filter(monthlyInshus, ['kind', kind]);
           //console.log(inshusSingle);
           _.forEach(inshusSingle, function (o) {
             // console.log(o.amount);
@@ -47932,9 +47941,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             o.amountTotal = o.amount * o.count;
             //console.log(o.amountTotal);
           });
-
-          //console.log(_.sumBy(inshusSingle, 'amountTotal'));
-
           this.inshuTotals.push({ 'kind': kind, 'totalAmount': _.sumBy(inshusSingle, 'amountTotal') });
         }
       } catch (err) {
@@ -47953,11 +47959,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }
 
       this.inshuTotals = _.sortBy(this.inshuTotals, ['totalAmount']).reverse();
-      //console.log(this.inshuTotals);
     }
   },
   mounted: function mounted() {
-    this.getMonthlyInshus();
+    console.log('mounted');
+    this.showMonthlyInshus();
+    console.log(this.inshus);
   }
 });
 
@@ -48007,66 +48014,50 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "mt-2" }, [
-      _c(
-        "table",
-        {
-          directives: [
-            {
-              name: "show",
-              rawName: "v-show",
-              value: _vm.dispType === "monthly",
-              expression: "dispType === 'monthly'"
-            }
-          ],
-          staticClass: "table table-sm"
-        },
-        [
-          _vm._m(0),
-          _vm._v(" "),
-          _vm._l(_vm.inshuTotals, function(inshuTotal) {
-            return _c("tr", [
-              _c("td", [_vm._v(_vm._s(inshuTotal.kind))]),
+      _vm.dispType === "monthly"
+        ? _c(
+            "table",
+            { staticClass: "table table-sm" },
+            [
+              _vm._m(0),
               _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(inshuTotal.totalAmount) + " ml")])
-            ])
-          })
-        ],
-        2
-      ),
+              _vm._l(_vm.inshuTotals, function(inshuTotal) {
+                return _c("tr", [
+                  _c("td", [_vm._v(_vm._s(inshuTotal.kind))]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(inshuTotal.totalAmount) + " ml")])
+                ])
+              })
+            ],
+            2
+          )
+        : _vm._e(),
       _vm._v(" "),
       _c("div", { staticClass: "mt-2" }, [
-        _c(
-          "table",
-          {
-            directives: [
-              {
-                name: "show",
-                rawName: "v-show",
-                value: _vm.dispType === "all",
-                expression: "dispType === 'all'"
-              }
-            ],
-            staticClass: "table table-sm"
-          },
-          [
-            _vm._m(1),
-            _vm._v(" "),
-            _vm._l(_vm.inshus, function(inshu) {
-              return _c("tr", [
-                _c("td", [_vm._v(_vm._s(inshu.date))]),
+        _vm.dispType === "all"
+          ? _c(
+              "table",
+              { staticClass: "table table-sm" },
+              [
+                _vm._m(1),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(inshu.kind))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(inshu.how))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(inshu.amount) + "ml")]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(inshu.count))])
-              ])
-            })
-          ],
-          2
-        )
+                _vm._l(_vm.inshus, function(inshu) {
+                  return _c("tr", [
+                    _c("td", [_vm._v(_vm._s(inshu.date))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(inshu.kind))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(inshu.how))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(inshu.amount) + "ml")]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(inshu.count))])
+                  ])
+                })
+              ],
+              2
+            )
+          : _vm._e()
       ])
     ])
   ])

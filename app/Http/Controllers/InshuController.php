@@ -55,9 +55,8 @@ class InshuController extends Controller
       $inshus = Inshu::where('user_id', Auth::id())
                 ->whereBetween('date', [$dateFrom, $dateTo])
                 ->get();
-
       return $inshus;
-      $inshu_sum =[];
+      //$inshu_sum =[];
 
       // if ($inshus->count() > 0) {
       //
@@ -86,6 +85,28 @@ class InshuController extends Controller
       return $e->getMessage();
     }
     //return new InshuCollection(Inshu::where('user_id', $user_id));
+  }
+
+  public function apiTest(Request $request)
+  {
+    $type = $request->type;
+    switch($type)
+    {
+      case 'A':
+        return [
+          ['id'=> 1, 'date'=> '2018/09/01', 'kind' => 'あ', 'amount'=> 100],
+          ['id'=> 2, 'date'=> '2018/09/02', 'kind' => 'い', 'amount'=> 110],
+          ['id'=> 3, 'date'=> '2018/09/03', 'kind' => 'う', 'amount'=> 120],
+        ];
+        break;
+      case 'B':
+        return [
+          ['id'=> 4, 'date'=> '2018/10/01', 'kind' => 'え', 'amount'=> 200],
+          ['id'=> 5, 'date'=> '2018/10/02', 'kind' => 'お', 'amount'=> 210],
+        ];
+        break;
+      return 'invalid param.';
+    }
   }
 
 }

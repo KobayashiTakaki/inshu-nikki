@@ -22,3 +22,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
 Route::middleware('auth:api')->get('/inshu', 'InshuController@showTotal');
+Route::middleware('auth:api')->get('/apiTest', 'InshuController@apiTest');
