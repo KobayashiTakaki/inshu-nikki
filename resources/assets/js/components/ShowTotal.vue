@@ -96,8 +96,6 @@ export default {
       let ddTo = ('00' + new Date(yyyy,parseInt(mm)+1,0).getDate()).slice(-2);
       this.dateFrom = yyyy + '/' + mm + '/' + ddFrom;
       this.dateTo = yyyy + '/' + mm + '/' + ddTo;
-      console.log(this.dateFrom);
-      console.log(this.dateTo);
       axios
         .get("api/inshu", {
           params: {
@@ -143,9 +141,7 @@ export default {
     }
   },
   mounted() {
-    console.log('mounted');
     this.showMonthlyInshus();
-    console.log(this.inshus);
   }
 }
 </script>

@@ -47394,7 +47394,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       date: '',
       selectedKind: '',
       selectedHow: '',
-      kinds: [{ id: 'beer', name: 'ビール' }, { id: 'whiskey', name: 'ウィスキー' }, { id: 'wine', name: 'ワイン' }, { id: 'sake', name: '日本酒' }],
+      kinds: [],
       hows: [],
       count: 1,
       countMsgs: [],
@@ -47410,19 +47410,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
 
   methods: {
-    fetchHow: function fetchHow() {
-      this.selectedHow = '';
-      var tmp_hows = [];
-      if (this.selectedKind == 'beer') {
-        tmp_hows = [{ id: 'glass', name: 'グラス' }, { id: 'mug_midium', name: '中ジョッキ' }, { id: 'mug_large', name: '大ジョッキ' }];
-      } else if (this.selectedKind == 'whiskey') {
-        tmp_hows = [{ id: 'soda', name: 'ハイボール' }, { id: 'water', name: '水割り' }];
-      } else if (this.selectedKind == 'wine') {
-        tmp_hows = [{ id: 'glass', name: 'グラス' }];
-      } else if (this.selectedKind == 'sake') {
-        tmp_hows = [{ id: 'glass', name: 'グラス' }, { id: 'ichigou', name: '一合' }];
-      } else {}
-      this.hows = tmp_hows;
+    getKinds: function getKinds() {
+      var _this = this;
+
+      axios.get("api/kinds").then(function (response) {
+        // let kinds = _.map(response.data, 'kind');
+        _this.kinds = response.data;
+      });
+    },
+    getHows: function getHows(kind) {
+      var _this2 = this;
+
+      axios.get("api/hows", {
+        params: {
+          kind: kind
+        }
+      }).then(function (response) {
+        _this2.hows = response.data;
+        console.log(_this2.hows);
+      });
       this.checkKind();
     },
     setDateString: function setDateString() {
@@ -47482,7 +47488,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   mounted: function mounted() {
-    this.fetchHow(), this.setDateString(), this.checkDate(), this.checkKind(), this.checkHow(), this.checkCount();
+    this.fetchHow(), this.setDateString(), this.checkDate(), this.checkKind(), this.checkHow(), this.checkCount(), this.getKinds();
   }
 });
 
@@ -47570,7 +47576,9 @@ var render = function() {
                       ? $$selectedVal
                       : $$selectedVal[0]
                   },
-                  _vm.fetchHow
+                  function($event) {
+                    _vm.getHows(_vm.selectedKind)
+                  }
                 ]
               }
             },
@@ -47585,8 +47593,8 @@ var render = function() {
               ),
               _vm._v(" "),
               _vm._l(_vm.kinds, function(kind) {
-                return _c("option", { domProps: { value: kind.id } }, [
-                  _vm._v("\n          " + _vm._s(kind.name) + "\n        ")
+                return _c("option", { domProps: { value: kind.kind } }, [
+                  _vm._v("\n          " + _vm._s(kind.kindDisp) + "\n        ")
                 ])
               })
             ],
@@ -47650,8 +47658,8 @@ var render = function() {
               ),
               _vm._v(" "),
               _vm._l(_vm.hows, function(how) {
-                return _c("option", { domProps: { value: how.id } }, [
-                  _vm._v("\n          " + _vm._s(how.name) + "\n        ")
+                return _c("option", { domProps: { value: how.how } }, [
+                  _vm._v("\n          " + _vm._s(how.howDisp) + "\n        ")
                 ])
               })
             ],
@@ -47892,8 +47900,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var ddTo = ('00' + new Date(yyyy, parseInt(mm) + 1, 0).getDate()).slice(-2);
       this.dateFrom = yyyy + '/' + mm + '/' + ddFrom;
       this.dateTo = yyyy + '/' + mm + '/' + ddTo;
-      console.log(this.dateFrom);
-      console.log(this.dateTo);
       axios.get("api/inshu", {
         params: {
           dateFrom: this.dateFrom,
@@ -47962,9 +47968,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     }
   },
   mounted: function mounted() {
-    console.log('mounted');
     this.showMonthlyInshus();
-    console.log(this.inshus);
   }
 });
 

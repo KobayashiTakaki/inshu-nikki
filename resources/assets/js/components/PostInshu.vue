@@ -9,10 +9,10 @@
         <small class="text-muted" v-for="dateMsg in dateMsgs">{{dateMsg}}</small>
       </div>
       <div class="form-group">
-        <select name="kind" v-model="selectedKind" v-on:change="fetchHow">
+        <select name="kind" v-model="selectedKind" v-on:change="getHows(selectedKind)">
           <option value='' disabled selected style='display:none;'>種類</option>
-          <option v-for="kind in kinds" v-bind:value="kind.id">
-            {{kind.name}}
+          <option v-for="kind in kinds" v-bind:value="kind.kind">
+            {{kind.kindDisp}}
           </option>
         </select>
         <small>を</small>
@@ -21,8 +21,8 @@
       <div class ="form-group">
         <select name="how" v-model="selectedHow" v-on:change="checkHow">
           <option value='' disabled selected style='display:none;'>飲み方</option>
-          <option v-for="how in hows" v-bind:value="how.id">
-            {{how.name}}
+          <option v-for="how in hows" v-bind:value="how.how">
+            {{how.howDisp}}
           </option>
         </select>
         <small>で</small>
@@ -44,12 +44,7 @@
         date: '',
         selectedKind: '',
         selectedHow: '',
-        kinds: [
-        {id: 'beer', name: 'ビール'},
-        {id: 'whiskey', name: 'ウィスキー'},
-        {id: 'wine', name: 'ワイン'},
-        {id: 'sake', name: '日本酒'},
-        ],
+        kinds: [],
         hows: [],
         count: 1,
         countMsgs: [],
@@ -65,32 +60,25 @@
       }
     },
     methods: {
-      fetchHow: function() {
-        this.selectedHow = '';
-        var tmp_hows = [];
-        if (this.selectedKind == 'beer') {
-          tmp_hows = [
-            {id: 'glass', name: 'グラス'},
-            {id: 'mug_midium', name: '中ジョッキ'},
-            {id: 'mug_large', name: '大ジョッキ'},
-          ]
-        } else if (this.selectedKind == 'whiskey') {
-          tmp_hows = [
-            {id: 'soda', name: 'ハイボール'},
-            {id: 'water', name: '水割り'},
-          ]
-        } else if (this.selectedKind == 'wine') {
-          tmp_hows = [
-            {id: 'glass', name: 'グラス'},
-          ]
-        } else if (this.selectedKind == 'sake') {
-          tmp_hows = [
-            {id: 'glass', name: 'グラス'},
-            {id: 'ichigou', name: '一合'},
-          ]
-        } else {
-        }
-        this.hows = tmp_hows;
+      getKinds: function() {
+        axios
+          .get("api/kinds")
+          .then(response => {
+            // let kinds = _.map(response.data, 'kind');
+            this.kinds = response.data;
+          });
+      },
+      getHows: function(kind){
+        axios
+          .get("api/hows",{
+            params: {
+              kind: kind
+            }
+          })
+          .then(response => {
+            this.hows = response.data;
+            console.log(this.hows);
+          });
         this.checkKind();
       },
       setDateString: function() {
@@ -155,7 +143,8 @@
       this.checkDate(),
       this.checkKind(),
       this.checkHow(),
-      this.checkCount()
+      this.checkCount(),
+      this.getKinds()
     }
   }
 </script>

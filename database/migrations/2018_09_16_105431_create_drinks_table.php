@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAlcAmount extends Migration
+class CreateDrinksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateAlcAmount extends Migration
      */
     public function up()
     {
-        //
-        Schema::create('alc_amount', function (Blueprint $table) {
+        Schema::create('drinks', function (Blueprint $table) {
           $table->string('kind');
+          $table->string('kindDisp');
           $table->string('how');
+          $table->string('howDisp');
           $table->integer('amount');
         });
     }
@@ -28,7 +29,6 @@ class CreateAlcAmount extends Migration
      */
     public function down()
     {
-        //
-        Schema::dropIfExists('alc_amount');
+        Schema::dropIfExists('drinks');
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateInshuTable extends Migration
+class CreateInshusTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateInshuTable extends Migration
      */
     public function up()
     {
-        Schema::create('inshu', function (Blueprint $table) {
+        Schema::create('inshus', function (Blueprint $table) {
           $table->integer('id')->unsigned()->autoIncrement();
           $table->integer('user_id')->unsigned();
           $table->string('date');
@@ -34,6 +34,6 @@ class CreateInshuTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('inshu');
+        Schema::dropIfExists('inshus');
     }
 }
