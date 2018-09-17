@@ -22,6 +22,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
 Route::middleware('auth:api')->get('/inshu', 'InshuController@getInshus');
+Route::middleware('auth:api')->get('/drinks', 'DrinkController@getDrinks');
 Route::middleware('auth:api')->get('/kinds', 'DrinkController@getKinds');
 Route::middleware('auth:api')->get('/hows', 'DrinkController@getHows');
 Route::middleware('auth:api')->get('/apiTest', 'InshuController@apiTest');

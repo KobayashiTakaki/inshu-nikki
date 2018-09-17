@@ -11,6 +11,18 @@ use Illuminate\Http\Response;
 class DrinkController extends Controller
 {
     //
+    public function getDrinks(Request $request)
+    {
+      try
+      {
+        $drinks = Drink::get();
+        return $drinks;
+      }
+      catch (Exception $e)
+      {
+        return $e->getMessage();
+      }
+    }
     public function getKinds(Request $request)
     {
       try

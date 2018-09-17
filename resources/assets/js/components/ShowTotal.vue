@@ -11,7 +11,7 @@
           <th scope="col">量</th>
         </tr>
         <tr v-for="inshuTotal in inshuTotals">
-          <td>{{ inshuTotal.kind }}</td>
+          <td>{{ convKindDisp(inshuTotal.kind) }}</td>
           <td>{{ inshuTotal.totalAmount }} ml</td>
         </tr>
       </table>
@@ -26,8 +26,8 @@
           </tr>
           <tr v-for="inshu in inshus">
             <td>{{ inshu.date }}</td>
-            <td>{{ inshu.kind }}</td>
-            <td>{{ inshu.how }}</td>
+            <td>{{ convKindDisp(inshu.kind) }}</td>
+            <td>{{ convHowDisp(inshu.how) }}</td>
             <td>{{ inshu.amount }}ml</td>
             <td>{{ inshu.count }}</td>
           </tr>
@@ -42,42 +42,43 @@
 export default {
   data () {
     return {
+      drinks: [],
       inshus: null,
       inshuTotals: [],
       dateFrom: '',
       dateTo: '',
       dispType: 'monthly',
-      someData: null
     }
   },
   methods: {
-    convKindDisp: function(kind) {
-      switch (kind) {
-        case 'beer':
-          return 'ビール';
-          break;
-        case 'whiskey':
-          return 'ウィスキー';
-          break;
-        case 'wine':
-          return 'ワイン';
-          break;
-        case 'sake':
-          return '日本酒';
-          break;
-        default:
-          return '';
-      }
+    //Drinkを取得する
+    getDrinks: function() {
+      axios
+        .get("api/drinks")
+        .then(response => {
+          this.drinks = response.data;
+        });
     },
+    //種類を表示用に変換する
+    convKindDisp: function(kind) {
+      const drink = _.head(_.filter(this.drinks, {'kind': kind}))
+      return drink.kindDisp;
+    },
+    //飲み方を表示用に変換する
+    convHowDisp: function(how) {
+      const drink = _.head(_.filter(this.drinks, {'how': how}))
+      return drink.howDisp;
+    },
+    //表示する内容を切り替える
     changeDispType: function(type) {
       if(this.dispType === type) {
         return;
       }
       switch(type) {
-        case 'monthly':
+        case 'monthly': //今月の飲酒量を表示する
           this.showMonthlyInshus();
           break;
-        case 'all':
+        case 'all': //一覧を表示する
           this.getAllInshus();
           break;
         default:
@@ -88,12 +89,13 @@ export default {
       this.getMonthlyInshus();
       this.calcInshuTotal();
     },
+    //今月の飲酒レコードを取得する
     getMonthlyInshus: function() {
-      let dt = new Date();
-      let yyyy = dt.getFullYear();
-      let mm = ('00' + (dt.getMonth()+1)).slice(-2);
-      let ddFrom = '01';
-      let ddTo = ('00' + new Date(yyyy,parseInt(mm)+1,0).getDate()).slice(-2);
+      const dt = new Date();
+      const yyyy = dt.getFullYear();
+      const mm = ('00' + (dt.getMonth()+1)).slice(-2);
+      const ddFrom = '01';
+      const ddTo = ('00' + new Date(yyyy,parseInt(mm)+1,0).getDate()).slice(-2);
       this.dateFrom = yyyy + '/' + mm + '/' + ddFrom;
       this.dateTo = yyyy + '/' + mm + '/' + ddTo;
       axios
@@ -103,14 +105,12 @@ export default {
             dateTo: this.dateTo
           }
         })
-        // .then(function (response){
-        //   inshusLocal = response.data;
-        // })
         .then(response => {
           this.inshus = response.data;
           this.calcInshuTotal();
         });
     },
+    //全期間の飲酒レコードを取得する
     getAllInshus: function() {
       axios
         .get("api/inshu", {
@@ -121,26 +121,23 @@ export default {
         })
         .then(response => {this.inshus = response.data});
     },
+    //種類ごとに量を合計する
     calcInshuTotal: function() {
-      let inshus = this.inshus;
       this.inshuTotals = [];
-      let monthlyInshus = inshus;
-      let kinds = _.uniq(_.map(monthlyInshus, 'kind'));
+      const monthlyInshus = this.inshus;
+      const kinds = _.uniq(_.map(monthlyInshus, 'kind'));
       for(let kind of kinds) {
-        let inshusSingle = _.filter(monthlyInshus, ['kind', kind]);
-        //console.log(inshusSingle);
+        const inshusSingle = _.filter(monthlyInshus, ['kind', kind]);
         _.forEach(inshusSingle, function(o) {
-          // console.log(o.amount);
-          // console.log(o.count);
           o.amountTotal = o.amount * o.count;
-          //console.log(o.amountTotal);
         });
         this.inshuTotals.push({'kind': kind, 'totalAmount': _.sumBy(inshusSingle, 'amountTotal')});
       }
       this.inshuTotals = _.sortBy(this.inshuTotals, ['totalAmount']).reverse();
     }
   },
-  mounted() {
+  created() {
+    this.getDrinks();
     this.showMonthlyInshus();
   }
 }

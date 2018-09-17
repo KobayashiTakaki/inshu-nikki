@@ -9,7 +9,7 @@
         <small class="text-muted" v-for="dateMsg in dateMsgs">{{dateMsg}}</small>
       </div>
       <div class="form-group">
-        <select name="kind" v-model="selectedKind" v-on:change="getHows(selectedKind)">
+        <select name="kind" v-model="selectedKind" v-on:change="setHows(selectedKind)">
           <option value='' disabled selected style='display:none;'>種類</option>
           <option v-for="kind in kinds" v-bind:value="kind.kind">
             {{kind.kindDisp}}
@@ -20,7 +20,7 @@
       </div>
       <div class ="form-group">
         <select name="how" v-model="selectedHow" v-on:change="checkHow">
-          <option value='' disabled selected style='display:none;'>飲み方</option>
+          <option value='' disabled style='display:none;'>飲み方</option>
           <option v-for="how in hows" v-bind:value="how.how">
             {{how.howDisp}}
           </option>
@@ -44,6 +44,7 @@
         date: '',
         selectedKind: '',
         selectedHow: '',
+        drinks: [],
         kinds: [],
         hows: [],
         count: 1,
@@ -60,25 +61,22 @@
       }
     },
     methods: {
-      getKinds: function() {
+      getDrinks: function() {
         axios
-          .get("api/kinds")
+          .get("api/drinks")
           .then(response => {
-            // let kinds = _.map(response.data, 'kind');
-            this.kinds = response.data;
+            this.drinks = response.data;
+            this.setKinds();
           });
       },
-      getHows: function(kind){
-        axios
-          .get("api/hows",{
-            params: {
-              kind: kind
-            }
-          })
-          .then(response => {
-            this.hows = response.data;
-            console.log(this.hows);
-          });
+      setKinds: function() {
+        _.forEach(this.drinks, o => this.kinds.push(_.pick(o, ['kind','kindDisp'])));
+        this.kinds = _.uniqBy(this.kinds, 'kind');
+      },
+      setHows: function(kind) {
+        this.hows = [];
+        let drinks = _.filter(this.drinks, {'kind': kind});
+        _.forEach(drinks, o => this.hows.push(_.pick(o, ['how','howDisp'])));
         this.checkKind();
       },
       setDateString: function() {
@@ -138,13 +136,12 @@
       }
     },
     mounted() {
-      this.fetchHow(),
-      this.setDateString(),
-      this.checkDate(),
-      this.checkKind(),
-      this.checkHow(),
-      this.checkCount(),
-      this.getKinds()
+      this.getDrinks();
+      this.setDateString();
+      this.checkDate();
+      this.checkKind();
+      this.checkHow();
+      this.checkCount();
     }
   }
 </script>

@@ -47394,6 +47394,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       date: '',
       selectedKind: '',
       selectedHow: '',
+      drinks: [],
       kinds: [],
       hows: [],
       count: 1,
@@ -47410,24 +47411,29 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
 
   methods: {
-    getKinds: function getKinds() {
+    getDrinks: function getDrinks() {
       var _this = this;
 
-      axios.get("api/kinds").then(function (response) {
-        // let kinds = _.map(response.data, 'kind');
-        _this.kinds = response.data;
+      axios.get("api/drinks").then(function (response) {
+        _this.drinks = response.data;
+        _this.setKinds();
       });
     },
-    getHows: function getHows(kind) {
+    setKinds: function setKinds() {
       var _this2 = this;
 
-      axios.get("api/hows", {
-        params: {
-          kind: kind
-        }
-      }).then(function (response) {
-        _this2.hows = response.data;
-        console.log(_this2.hows);
+      _.forEach(this.drinks, function (o) {
+        return _this2.kinds.push(_.pick(o, ['kind', 'kindDisp']));
+      });
+      this.kinds = _.uniqBy(this.kinds, 'kind');
+    },
+    setHows: function setHows(kind) {
+      var _this3 = this;
+
+      this.hows = [];
+      var drinks = _.filter(this.drinks, { 'kind': kind });
+      _.forEach(drinks, function (o) {
+        return _this3.hows.push(_.pick(o, ['how', 'howDisp']));
       });
       this.checkKind();
     },
@@ -47488,7 +47494,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   mounted: function mounted() {
-    this.fetchHow(), this.setDateString(), this.checkDate(), this.checkKind(), this.checkHow(), this.checkCount(), this.getKinds();
+    this.getDrinks();
+    this.setDateString();
+    this.checkDate();
+    this.checkKind();
+    this.checkHow();
+    this.checkCount();
   }
 });
 
@@ -47577,7 +47588,7 @@ var render = function() {
                       : $$selectedVal[0]
                   },
                   function($event) {
-                    _vm.getHows(_vm.selectedKind)
+                    _vm.setHows(_vm.selectedKind)
                   }
                 ]
               }
@@ -47652,7 +47663,7 @@ var render = function() {
                 "option",
                 {
                   staticStyle: { display: "none" },
-                  attrs: { value: "", disabled: "", selected: "" }
+                  attrs: { value: "", disabled: "" }
                 },
                 [_vm._v("飲み方")]
               ),
@@ -47843,43 +47854,46 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      drinks: [],
       inshus: null,
       inshuTotals: [],
       dateFrom: '',
       dateTo: '',
-      dispType: 'monthly',
-      someData: null
+      dispType: 'monthly'
     };
   },
 
   methods: {
-    convKindDisp: function convKindDisp(kind) {
-      switch (kind) {
-        case 'beer':
-          return 'ビール';
-          break;
-        case 'whiskey':
-          return 'ウィスキー';
-          break;
-        case 'wine':
-          return 'ワイン';
-          break;
-        case 'sake':
-          return '日本酒';
-          break;
-        default:
-          return '';
-      }
+    //Drinkを取得する
+    getDrinks: function getDrinks() {
+      var _this = this;
+
+      axios.get("api/drinks").then(function (response) {
+        _this.drinks = response.data;
+      });
     },
+    //種類を表示用に変換する
+    convKindDisp: function convKindDisp(kind) {
+      var drink = _.head(_.filter(this.drinks, { 'kind': kind }));
+      return drink.kindDisp;
+    },
+    //飲み方を表示用に変換する
+    convHowDisp: function convHowDisp(how) {
+      var drink = _.head(_.filter(this.drinks, { 'how': how }));
+      return drink.howDisp;
+    },
+    //表示する内容を切り替える
     changeDispType: function changeDispType(type) {
       if (this.dispType === type) {
         return;
       }
       switch (type) {
         case 'monthly':
+          //今月の飲酒量を表示する
           this.showMonthlyInshus();
           break;
         case 'all':
+          //一覧を表示する
           this.getAllInshus();
           break;
         default:
@@ -47890,8 +47904,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.getMonthlyInshus();
       this.calcInshuTotal();
     },
+    //今月の飲酒レコードを取得する
     getMonthlyInshus: function getMonthlyInshus() {
-      var _this = this;
+      var _this2 = this;
 
       var dt = new Date();
       var yyyy = dt.getFullYear();
@@ -47905,17 +47920,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           dateFrom: this.dateFrom,
           dateTo: this.dateTo
         }
-      })
-      // .then(function (response){
-      //   inshusLocal = response.data;
-      // })
-      .then(function (response) {
-        _this.inshus = response.data;
-        _this.calcInshuTotal();
+      }).then(function (response) {
+        _this2.inshus = response.data;
+        _this2.calcInshuTotal();
       });
     },
+    //全期間の飲酒レコードを取得する
     getAllInshus: function getAllInshus() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.get("api/inshu", {
         params: {
@@ -47923,13 +47935,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           dateTo: '9999/12/31'
         }
       }).then(function (response) {
-        _this2.inshus = response.data;
+        _this3.inshus = response.data;
       });
     },
+    //種類ごとに量を合計する
     calcInshuTotal: function calcInshuTotal() {
-      var inshus = this.inshus;
       this.inshuTotals = [];
-      var monthlyInshus = inshus;
+      var monthlyInshus = this.inshus;
       var kinds = _.uniq(_.map(monthlyInshus, 'kind'));
       var _iteratorNormalCompletion = true;
       var _didIteratorError = false;
@@ -47940,12 +47952,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           var kind = _step.value;
 
           var inshusSingle = _.filter(monthlyInshus, ['kind', kind]);
-          //console.log(inshusSingle);
           _.forEach(inshusSingle, function (o) {
-            // console.log(o.amount);
-            // console.log(o.count);
             o.amountTotal = o.amount * o.count;
-            //console.log(o.amountTotal);
           });
           this.inshuTotals.push({ 'kind': kind, 'totalAmount': _.sumBy(inshusSingle, 'amountTotal') });
         }
@@ -47967,7 +47975,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.inshuTotals = _.sortBy(this.inshuTotals, ['totalAmount']).reverse();
     }
   },
-  mounted: function mounted() {
+  created: function created() {
+    this.getDrinks();
     this.showMonthlyInshus();
   }
 });
@@ -48027,7 +48036,7 @@ var render = function() {
               _vm._v(" "),
               _vm._l(_vm.inshuTotals, function(inshuTotal) {
                 return _c("tr", [
-                  _c("td", [_vm._v(_vm._s(inshuTotal.kind))]),
+                  _c("td", [_vm._v(_vm._s(_vm.convKindDisp(inshuTotal.kind)))]),
                   _vm._v(" "),
                   _c("td", [_vm._v(_vm._s(inshuTotal.totalAmount) + " ml")])
                 ])
@@ -48049,9 +48058,9 @@ var render = function() {
                   return _c("tr", [
                     _c("td", [_vm._v(_vm._s(inshu.date))]),
                     _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(inshu.kind))]),
+                    _c("td", [_vm._v(_vm._s(_vm.convKindDisp(inshu.kind)))]),
                     _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(inshu.how))]),
+                    _c("td", [_vm._v(_vm._s(_vm.convHowDisp(inshu.how)))]),
                     _vm._v(" "),
                     _c("td", [_vm._v(_vm._s(inshu.amount) + "ml")]),
                     _vm._v(" "),
