@@ -20,5 +20,8 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 
-    RewriteRule public/$ / [L]
+    RewriteRule inshu-nikki/public/$ %1/ [L]
+
 </IfModule>
+
+Header add Pragma "no-cache"
