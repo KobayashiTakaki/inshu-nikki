@@ -47930,7 +47930,7 @@ var render = function() {
               _vm._m(0),
               _vm._v(" "),
               _vm._l(_vm.inshuTotals, function(inshuTotal) {
-                return inshuTotal !== null
+                return _vm.inshuTotals.length !== 0
                   ? _c("tr", [
                       _c("td", [
                         _vm._v(_vm._s(_vm.convKindDisp(inshuTotal.kind)))
@@ -47954,7 +47954,7 @@ var render = function() {
                 _vm._m(1),
                 _vm._v(" "),
                 _vm._l(_vm.inshus, function(inshu) {
-                  return inshu !== null
+                  return inshu.length !== 0
                     ? _c("tr", [
                         _c("td", [_vm._v(_vm._s(inshu.date))]),
                         _vm._v(" "),
