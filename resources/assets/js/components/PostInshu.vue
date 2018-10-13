@@ -8,7 +8,7 @@
 
         <select class="form-control" name="kind" v-model="selectedKind" v-on:change="setHows(selectedKind)">
           <option value='' disabled selected style='display:none;'>種類</option>
-          <option v-for="kind in kinds" v-bind:value="kind.kind">
+          <option v-for="kind in kinds" v-if="kind !== null" v-bind:value="kind.kind">
             {{kind.kindDisp}}
           </option>
         </select>
@@ -51,9 +51,7 @@
           .get("api/drink/index")
           .then(response => {
             this.drinks = response.data;
-            if(this.drinks === null) {
-              this.setKinds();
-            }
+            this.setKinds();
           });
       },
       setKinds: function() {

@@ -47401,9 +47401,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       axios.get("api/drink/index").then(function (response) {
         _this.drinks = response.data;
-        if (_this.drinks === null) {
-          _this.setKinds();
-        }
+        _this.setKinds();
       });
     },
     setKinds: function setKinds() {
@@ -47572,9 +47570,13 @@ var render = function() {
               ),
               _vm._v(" "),
               _vm._l(_vm.kinds, function(kind) {
-                return _c("option", { domProps: { value: kind.kind } }, [
-                  _vm._v("\n          " + _vm._s(kind.kindDisp) + "\n        ")
-                ])
+                return kind !== null
+                  ? _c("option", { domProps: { value: kind.kind } }, [
+                      _vm._v(
+                        "\n          " + _vm._s(kind.kindDisp) + "\n        "
+                      )
+                    ])
+                  : _vm._e()
               })
             ],
             2
