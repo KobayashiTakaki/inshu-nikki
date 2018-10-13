@@ -36,15 +36,8 @@ class DrinksTableSeeder extends Seeder
         DB::table('drinks')->insert([
           'kind' => 'whiskey',
           'kindDisp' => 'ウィスキー',
-          'how' => 'single',
-          'howDisp' => 'シングル',
-          'amount' => 30,
-        ]);
-        DB::table('drinks')->insert([
-          'kind' => 'whiskey',
-          'kindDisp' => 'ウィスキー',
-          'how' => 'double',
-          'howDisp' => 'ダブル',
+          'how' => 'rock',
+          'howDisp' => 'ロック',
           'amount' => 60,
         ]);
         DB::table('drinks')->insert([
@@ -52,7 +45,7 @@ class DrinksTableSeeder extends Seeder
           'kindDisp' => 'ウィスキー',
           'how' => 'soda',
           'howDisp' => 'ハイボール',
-          'amount' => 40,
+          'amount' => 60,
         ]);
         DB::table('drinks')->insert([
           'kind' => 'whiskey',
@@ -81,6 +74,20 @@ class DrinksTableSeeder extends Seeder
           'how' => 'ichigou',
           'howDisp' => '一合',
           'amount' => 180,
+        ]);
+        DB::table('drinks')->insert([
+          'kind' => 'shochu',
+          'kindDisp' => '焼酎',
+          'how' => 'rock',
+          'howDisp' => 'ロック',
+          'amount' => 100,
+        ]);
+        DB::table('drinks')->insert([
+          'kind' => 'shochu',
+          'kindDisp' => '焼酎',
+          'how' => 'water',
+          'howDisp' => '水割り',
+          'amount' => 100,
         ]);
     }
 }
