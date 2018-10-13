@@ -51,7 +51,9 @@
           .get("api/drink/index")
           .then(response => {
             this.drinks = response.data;
-            this.setKinds();
+            if(this.drinks === null) {
+              this.setKinds();
+            }
           });
       },
       setKinds: function() {

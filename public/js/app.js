@@ -47401,7 +47401,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       axios.get("api/drink/index").then(function (response) {
         _this.drinks = response.data;
-        _this.setKinds();
+        if (_this.drinks === null) {
+          _this.setKinds();
+        }
       });
     },
     setKinds: function setKinds() {
