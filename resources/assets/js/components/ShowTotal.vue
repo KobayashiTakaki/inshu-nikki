@@ -60,7 +60,12 @@ export default {
     //種類を表示用に変換する
     convKindDisp: function(kind) {
       const drink = _.head(_.filter(this.drinks, {'kind': kind}))
-      return drink.kindDisp;
+      if(drink !== null) {
+        return drink.kindDisp;
+      } else {
+        return ''
+      }
+
     },
     //飲み方を表示用に変換する
     convHowDisp: function(how) {

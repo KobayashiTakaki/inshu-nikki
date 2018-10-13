@@ -47770,7 +47770,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     //種類を表示用に変換する
     convKindDisp: function convKindDisp(kind) {
       var drink = _.head(_.filter(this.drinks, { 'kind': kind }));
-      return drink.kindDisp;
+      if (drink !== null) {
+        return drink.kindDisp;
+      } else {
+        return '';
+      }
     },
     //飲み方を表示用に変換する
     convHowDisp: function convHowDisp(how) {
