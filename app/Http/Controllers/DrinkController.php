@@ -11,37 +11,12 @@ use Illuminate\Http\Response;
 class DrinkController extends Controller
 {
     //
-    public function getDrinks(Request $request)
+    public function index(Request $request)
     {
       try
       {
         $drinks = Drink::get();
         return $drinks;
-      }
-      catch (Exception $e)
-      {
-        return $e->getMessage();
-      }
-    }
-    public function getKinds(Request $request)
-    {
-      try
-      {
-        $kinds = Drink::select('kind','kindDisp')->distinct()->get();
-        return $kinds;
-      }
-      catch (Exception $e)
-      {
-        return $e->getMessage();
-      }
-    }
-
-    public function getHows(Request $request)
-    {
-      try
-      {
-        $hows = Drink::where('kind', $request->kind)->select('how','howDisp')->distinct()->get();
-        return $hows;
       }
       catch (Exception $e)
       {

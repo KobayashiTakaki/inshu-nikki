@@ -1,6 +1,6 @@
 
 // Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+@import url('https://fonts.googleapis.com/css?family=Kosugi');
 
 @import url('//fonts.googleapis.com/earlyaccess/notosansjapanese.css');
 
@@ -13,9 +13,10 @@
 //flatpickr
 @import '~flatpickr/dist/flatpickr.css';
 
+body{
+  font-family: 'Kosugi', sans-serif;  
+}
 
-// Font Awesome
-@import '~font-awesome-scss/scss/font-awesome.scss';
 
 .header {
   background-color: $indigo;
@@ -56,4 +57,8 @@ h1,h2,h3,h4,h5,h6 {
   font-size: 0.8em;
   color: $grey;
   font-style: italic;
+}
+
+[v-cloak] {
+  display:none;
 }

@@ -24,6 +24,7 @@
         "ajv": "^6.5.2",
         "bootstrap-datepicker": "^1.8.0",
         "flatpickr": "^4.5.1",
-        "grunt-cli": "^1.2.0"
+        "grunt-cli": "^1.2.0",
+        "yarn": "^1.10.1"
     }
 }

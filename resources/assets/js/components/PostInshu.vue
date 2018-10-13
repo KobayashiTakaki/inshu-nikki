@@ -1,39 +1,36 @@
 <template>
   <div class="card">
-    <div class="card-header">
-      <h5>飲酒登録</h5>
-    </div>
     <div class="card-body">
+      <h5>飲酒登録</h5>
       <div class="form-group">
-        <input type="text" class="calendar" name="date" id="date" placeholder="日付" v-model="date" v-on:change="checkDate">
+        <input class="form-control calendar" type="text" name="date" id="date" placeholder="日付" v-model="date" v-on:change="checkDate">
         <small class="text-muted" v-for="dateMsg in dateMsgs">{{dateMsg}}</small>
-      </div>
-      <div class="form-group">
-        <select name="kind" v-model="selectedKind" v-on:change="setHows(selectedKind)">
+
+        <select class="form-control" name="kind" v-model="selectedKind" v-on:change="setHows(selectedKind)">
           <option value='' disabled selected style='display:none;'>種類</option>
           <option v-for="kind in kinds" v-bind:value="kind.kind">
             {{kind.kindDisp}}
           </option>
         </select>
-        <small>を</small>
-        <small class="text-muted" v-for="kindMsg in kindMsgs">{{kindMsg}}</small>
-      </div>
-      <div class ="form-group">
-        <select name="how" v-model="selectedHow" v-on:change="checkHow">
+        <!-- <small>を</small>
+        <small class="text-muted" v-for="kindMsg in kindMsgs">{{kindMsg}}</small> -->
+
+
+        <select class="form-control" name="how" v-model="selectedHow" v-on:change="checkHow">
           <option value='' disabled style='display:none;'>飲み方</option>
           <option v-for="how in hows" v-bind:value="how.how">
             {{how.howDisp}}
           </option>
         </select>
-        <small>で</small>
-        <small class="text-muted" v-for="howMsg in howMsgs">{{howMsg}}</small>
-      </div>
-      <div class ="form-group">
-        <input class="col-3" type="number" min="1" name="count" id="count" value="1" v-model="count" v-on:change="checkCount">
+        <!-- <small class="text-muted" v-for="howMsg in howMsgs">{{howMsg}}</small>
+
+
+        <input class="form-control" type="number" min="1" name="count" id="count" value="1" v-model="count" v-on:change="checkCount">
         <small>杯</small>
-        <small class="text-muted" v-for="countMsg in countMsgs">{{countMsg}}</small>
+        <small class="text-muted" v-for="countMsg in countMsgs">{{countMsg}}</small> -->
+
+        <button type="submit" v-bind:disabled="isDisabled">送信</button>
       </div>
-      <button type="submit" v-bind:disabled="isDisabled">送信</button>
     </div>
   </div>
 </template>
@@ -47,13 +44,11 @@
         drinks: [],
         kinds: [],
         hows: [],
-        count: 1,
         countMsgs: [],
         errors: [],
         dateErr: true,
         kindErr: true,
         howErr: true,
-        countErr: true,
         dateMsgs: [],
         kindMsgs: [],
         howMsgs: [],
@@ -63,7 +58,7 @@
     methods: {
       getDrinks: function() {
         axios
-          .get("api/drinks")
+          .get("api/drink/index")
           .then(response => {
             this.drinks = response.data;
             this.setKinds();
@@ -113,22 +108,10 @@
           this.howErr = false;
         }
       },
-      checkCount: function () {
-        this.countMsgs = [];
-        if (0 > this.count || 10 < this.count) {
-          this.countMsgs.push('嘘でしょ？(10以下にしてください)');
-          this.countErr = true;
-        } else if (this.count == '') {
-          this.countMsgs.push('数を入力してください');
-          this.countErr = true;
-        } else {
-          this.countErr = false;
-        }
-      }
     },
     computed: {
       isDisabled: function () {
-        if (this.dateErr || this.kindErr || this.howErr || this.countErr) {
+        if (this.dateErr || this.kindErr || this.howErr) {
           return true;
         } else {
           return false;

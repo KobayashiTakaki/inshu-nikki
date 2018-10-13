@@ -47384,9 +47384,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -47397,13 +47394,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       drinks: [],
       kinds: [],
       hows: [],
-      count: 1,
       countMsgs: [],
       errors: [],
       dateErr: true,
       kindErr: true,
       howErr: true,
-      countErr: true,
       dateMsgs: [],
       kindMsgs: [],
       howMsgs: []
@@ -47414,7 +47409,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     getDrinks: function getDrinks() {
       var _this = this;
 
-      axios.get("api/drinks").then(function (response) {
+      axios.get("api/drink/index").then(function (response) {
         _this.drinks = response.data;
         _this.setKinds();
       });
@@ -47470,23 +47465,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       } else {
         this.howErr = false;
       }
-    },
-    checkCount: function checkCount() {
-      this.countMsgs = [];
-      if (0 > this.count || 10 < this.count) {
-        this.countMsgs.push('嘘でしょ？(10以下にしてください)');
-        this.countErr = true;
-      } else if (this.count == '') {
-        this.countMsgs.push('数を入力してください');
-        this.countErr = true;
-      } else {
-        this.countErr = false;
-      }
     }
   },
   computed: {
     isDisabled: function isDisabled() {
-      if (this.dateErr || this.kindErr || this.howErr || this.countErr) {
+      if (this.dateErr || this.kindErr || this.howErr) {
         return true;
       } else {
         return false;
@@ -47512,9 +47495,9 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "card" }, [
-    _vm._m(0),
-    _vm._v(" "),
     _c("div", { staticClass: "card-body" }, [
+      _c("h5", [_vm._v("飲酒登録")]),
+      _vm._v(" "),
       _c(
         "div",
         { staticClass: "form-group" },
@@ -47528,7 +47511,7 @@ var render = function() {
                 expression: "date"
               }
             ],
-            staticClass: "calendar",
+            staticClass: "form-control calendar",
             attrs: {
               type: "text",
               name: "date",
@@ -47551,15 +47534,8 @@ var render = function() {
             return _c("small", { staticClass: "text-muted" }, [
               _vm._v(_vm._s(dateMsg))
             ])
-          })
-        ],
-        2
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "form-group" },
-        [
+          }),
+          _vm._v(" "),
           _c(
             "select",
             {
@@ -47571,6 +47547,7 @@ var render = function() {
                   expression: "selectedKind"
                 }
               ],
+              staticClass: "form-control",
               attrs: { name: "kind" },
               on: {
                 change: [
@@ -47612,21 +47589,6 @@ var render = function() {
             2
           ),
           _vm._v(" "),
-          _c("small", [_vm._v("を")]),
-          _vm._v(" "),
-          _vm._l(_vm.kindMsgs, function(kindMsg) {
-            return _c("small", { staticClass: "text-muted" }, [
-              _vm._v(_vm._s(kindMsg))
-            ])
-          })
-        ],
-        2
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "form-group" },
-        [
           _c(
             "select",
             {
@@ -47638,6 +47600,7 @@ var render = function() {
                   expression: "selectedHow"
                 }
               ],
+              staticClass: "form-control",
               attrs: { name: "how" },
               on: {
                 change: [
@@ -47677,77 +47640,18 @@ var render = function() {
             2
           ),
           _vm._v(" "),
-          _c("small", [_vm._v("で")]),
-          _vm._v(" "),
-          _vm._l(_vm.howMsgs, function(howMsg) {
-            return _c("small", { staticClass: "text-muted" }, [
-              _vm._v(_vm._s(howMsg))
-            ])
-          })
+          _c(
+            "button",
+            { attrs: { type: "submit", disabled: _vm.isDisabled } },
+            [_vm._v("送信")]
+          )
         ],
         2
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "form-group" },
-        [
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.count,
-                expression: "count"
-              }
-            ],
-            staticClass: "col-3",
-            attrs: {
-              type: "number",
-              min: "1",
-              name: "count",
-              id: "count",
-              value: "1"
-            },
-            domProps: { value: _vm.count },
-            on: {
-              change: _vm.checkCount,
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.count = $event.target.value
-              }
-            }
-          }),
-          _vm._v(" "),
-          _c("small", [_vm._v("杯")]),
-          _vm._v(" "),
-          _vm._l(_vm.countMsgs, function(countMsg) {
-            return _c("small", { staticClass: "text-muted" }, [
-              _vm._v(_vm._s(countMsg))
-            ])
-          })
-        ],
-        2
-      ),
-      _vm._v(" "),
-      _c("button", { attrs: { type: "submit", disabled: _vm.isDisabled } }, [
-        _vm._v("送信")
-      ])
+      )
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-header" }, [
-      _c("h5", [_vm._v("飲酒登録")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -47857,8 +47761,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       drinks: [],
       inshus: null,
       inshuTotals: [],
-      dateFrom: '',
-      dateTo: '',
       dispType: 'monthly'
     };
   },
@@ -47868,7 +47770,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     getDrinks: function getDrinks() {
       var _this = this;
 
-      axios.get("api/drinks").then(function (response) {
+      axios.get("api/drink/index").then(function (response) {
         _this.drinks = response.data;
       });
     },
@@ -47915,7 +47817,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var ddTo = ('00' + new Date(yyyy, parseInt(mm) + 1, 0).getDate()).slice(-2);
       this.dateFrom = yyyy + '/' + mm + '/' + ddFrom;
       this.dateTo = yyyy + '/' + mm + '/' + ddTo;
-      axios.get("api/inshu", {
+      axios.get("api/inshu/index", {
         params: {
           dateFrom: this.dateFrom,
           dateTo: this.dateTo
@@ -47929,7 +47831,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     getAllInshus: function getAllInshus() {
       var _this3 = this;
 
-      axios.get("api/inshu", {
+      axios.get("api/inshu/index", {
         params: {
           dateFrom: '1900/01/01',
           dateTo: '9999/12/31'
@@ -47989,7 +47891,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "show_total mt-2" }, [
+  return _c("div", { staticClass: "show_total" }, [
     _c("div", { staticClass: "nav my-2" }, [
       _c("li", [
         _c(
@@ -48062,9 +47964,9 @@ var render = function() {
                     _vm._v(" "),
                     _c("td", [_vm._v(_vm._s(_vm.convHowDisp(inshu.how)))]),
                     _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(inshu.amount) + "ml")]),
+                    _c("td", [_vm._v(_vm._s(inshu.count))]),
                     _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(inshu.count))])
+                    _c("td", [_vm._v(_vm._s(inshu.amount) + "ml")])
                   ])
                 })
               ],
@@ -48097,9 +47999,9 @@ var staticRenderFns = [
       _vm._v(" "),
       _c("th", { attrs: { scope: "col" } }, [_vm._v("飲み方")]),
       _vm._v(" "),
-      _c("th", { attrs: { scope: "col" } }, [_vm._v("量")]),
+      _c("th", { attrs: { scope: "col" } }, [_vm._v("杯")]),
       _vm._v(" "),
-      _c("th", { attrs: { scope: "col" } }, [_vm._v("杯")])
+      _c("th", { attrs: { scope: "col" } }, [_vm._v("量")])
     ])
   }
 ]

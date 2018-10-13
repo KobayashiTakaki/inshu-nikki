@@ -15,7 +15,8 @@ class InshuController extends Controller
 {
   public function post(Request $request){
     $count = $request->input('count');
-    if(null === $count){
+    if(null === $count)
+    {
       $count = 1;
     }
 
@@ -35,33 +36,21 @@ class InshuController extends Controller
     return redirect('/');
   }
 
-  public function getInshus(Request $request) {
-    try {
+  public function index(Request $request) {
+    try
+    {
       $dateFrom = $request->dateFrom;
       $dateTo = $request->dateTo;
       $inshus = Inshu::where('user_id', Auth::id())
                 ->whereBetween('date', [$dateFrom, $dateTo])
+                ->orderBy('date')
                 ->get();
       return $inshus;
     } catch (Exception $e) {
       return $e->getMessage();
     }
   }
-
-  public function getKinds(Request $request)
-  {
-    try
-    {
-      $kinds = Drink::select('kind','kindDisp')->distinct()->get();
-      return $kinds;
-    }
-    catch (Exception $e)
-    {
-      return $e->getMessage();
-    }
-  }
-
-
+  
   public function apiTest(Request $request)
   {
     $type = $request->type;

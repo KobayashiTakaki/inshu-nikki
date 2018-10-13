@@ -1,10 +1,10 @@
 <template>
-  <div class="show_total mt-2">
+  <div class="show_total">
     <div class="nav my-2">
       <li><a class="nav-link" href="" v-on:click.prevent="changeDispType('monthly')">今月の飲酒量</a></li>
       <li><a class="nav-link" href="" v-on:click.prevent="changeDispType('all')">一覧</a></li>
     </div>
-    <div class="mt-2">
+    <div class="mt-2" v-cloak>
       <table class="table table-sm" v-if="dispType === 'monthly'">
         <tr>
           <th scope="col">種類</th>
@@ -21,15 +21,15 @@
             <th scope="col">日付</th>
             <th scope="col">種類</th>
             <th scope="col">飲み方</th>
-            <th scope="col">量</th>
             <th scope="col">杯</th>
+            <th scope="col">量</th>
           </tr>
           <tr v-for="inshu in inshus">
             <td>{{ inshu.date }}</td>
             <td>{{ convKindDisp(inshu.kind) }}</td>
             <td>{{ convHowDisp(inshu.how) }}</td>
-            <td>{{ inshu.amount }}ml</td>
             <td>{{ inshu.count }}</td>
+            <td>{{ inshu.amount }}ml</td>
           </tr>
         </table>
       </div>
@@ -45,8 +45,6 @@ export default {
       drinks: [],
       inshus: null,
       inshuTotals: [],
-      dateFrom: '',
-      dateTo: '',
       dispType: 'monthly',
     }
   },
@@ -54,7 +52,7 @@ export default {
     //Drinkを取得する
     getDrinks: function() {
       axios
-        .get("api/drinks")
+        .get("api/drink/index")
         .then(response => {
           this.drinks = response.data;
         });
@@ -99,7 +97,7 @@ export default {
       this.dateFrom = yyyy + '/' + mm + '/' + ddFrom;
       this.dateTo = yyyy + '/' + mm + '/' + ddTo;
       axios
-        .get("api/inshu", {
+        .get("api/inshu/index", {
           params: {
             dateFrom: this.dateFrom,
             dateTo: this.dateTo
@@ -113,7 +111,7 @@ export default {
     //全期間の飲酒レコードを取得する
     getAllInshus: function() {
       axios
-        .get("api/inshu", {
+        .get("api/inshu/index", {
           params: {
             dateFrom: '1900/01/01',
             dateTo: '9999/12/31'
