@@ -12,9 +12,6 @@
             {{kind.kindDisp}}
           </option>
         </select>
-        <!-- <small>を</small>
-        <small class="text-muted" v-for="kindMsg in kindMsgs">{{kindMsg}}</small> -->
-
 
         <select class="form-control" name="how" v-model="selectedHow" v-on:change="checkHow">
           <option value='' disabled style='display:none;'>飲み方</option>
@@ -22,13 +19,6 @@
             {{how.howDisp}}
           </option>
         </select>
-        <!-- <small class="text-muted" v-for="howMsg in howMsgs">{{howMsg}}</small>
-
-
-        <input class="form-control" type="number" min="1" name="count" id="count" value="1" v-model="count" v-on:change="checkCount">
-        <small>杯</small>
-        <small class="text-muted" v-for="countMsg in countMsgs">{{countMsg}}</small> -->
-
         <button type="submit" v-bind:disabled="isDisabled">送信</button>
       </div>
     </div>

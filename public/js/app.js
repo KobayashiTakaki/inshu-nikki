@@ -47374,16 +47374,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -47482,7 +47472,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     this.checkDate();
     this.checkKind();
     this.checkHow();
-    this.checkCount();
   }
 });
 
