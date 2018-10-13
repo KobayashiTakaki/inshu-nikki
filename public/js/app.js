@@ -47930,11 +47930,15 @@ var render = function() {
               _vm._m(0),
               _vm._v(" "),
               _vm._l(_vm.inshuTotals, function(inshuTotal) {
-                return _c("tr", [
-                  _c("td", [_vm._v(_vm._s(_vm.convKindDisp(inshuTotal.kind)))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(inshuTotal.totalAmount) + " ml")])
-                ])
+                return inshuTotal !== null
+                  ? _c("tr", [
+                      _c("td", [
+                        _vm._v(_vm._s(_vm.convKindDisp(inshuTotal.kind)))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(inshuTotal.totalAmount) + " ml")])
+                    ])
+                  : _vm._e()
               })
             ],
             2
@@ -47950,17 +47954,21 @@ var render = function() {
                 _vm._m(1),
                 _vm._v(" "),
                 _vm._l(_vm.inshus, function(inshu) {
-                  return _c("tr", [
-                    _c("td", [_vm._v(_vm._s(inshu.date))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(_vm.convKindDisp(inshu.kind)))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(_vm.convHowDisp(inshu.how)))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(inshu.count))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(inshu.amount) + "ml")])
-                  ])
+                  return inshu !== null
+                    ? _c("tr", [
+                        _c("td", [_vm._v(_vm._s(inshu.date))]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm._v(_vm._s(_vm.convKindDisp(inshu.kind)))
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(_vm.convHowDisp(inshu.how)))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(inshu.count))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(inshu.amount) + "ml")])
+                      ])
+                    : _vm._e()
                 })
               ],
               2

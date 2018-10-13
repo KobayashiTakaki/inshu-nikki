@@ -10,7 +10,7 @@
           <th scope="col">種類</th>
           <th scope="col">量</th>
         </tr>
-        <tr v-for="inshuTotal in inshuTotals">
+        <tr v-for="inshuTotal in inshuTotals" v-if="inshuTotal !== null">
           <td>{{ convKindDisp(inshuTotal.kind) }}</td>
           <td>{{ inshuTotal.totalAmount }} ml</td>
         </tr>
@@ -24,7 +24,7 @@
             <th scope="col">杯</th>
             <th scope="col">量</th>
           </tr>
-          <tr v-for="inshu in inshus">
+          <tr v-for="inshu in inshus" v-if="inshu !== null">
             <td>{{ inshu.date }}</td>
             <td>{{ convKindDisp(inshu.kind) }}</td>
             <td>{{ convHowDisp(inshu.how) }}</td>
