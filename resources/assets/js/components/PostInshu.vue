@@ -124,7 +124,6 @@
       this.checkDate();
       this.checkKind();
       this.checkHow();
-      this.checkCount();
     }
   }
 </script>
