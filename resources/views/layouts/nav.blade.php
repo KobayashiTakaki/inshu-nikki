@@ -11,7 +11,7 @@
           <span class="nav-link">{{ Auth::user()->name }}</span>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/logout">
+          <a class="nav-link" href="logout">
             {{ __('Logout') }}
           </a>
         </li>
