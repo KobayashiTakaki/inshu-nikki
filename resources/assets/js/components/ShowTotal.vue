@@ -60,6 +60,7 @@ export default {
     //種類を表示用に変換する
     convKindDisp: function(kind) {
       const drink = _.head(_.filter(this.drinks, {'kind': kind}))
+      console.log(drink)
       if(drink !== null) {
         return drink.kindDisp;
       } else {

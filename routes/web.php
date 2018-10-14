@@ -19,7 +19,7 @@ Route::get('register', function(){
 Route::post('register','UserController@register');
 */
 Route::post('post', 'InshuController@post');
-
+Route::get('logindemo', 'Auth\LoginController@loginDemo');
 Route::get('auth/twitter', 'Auth\LoginController@redirectToProvider');
 Route::get('auth/twitter/callback', 'Auth\LoginController@handleProviderCallback');
 

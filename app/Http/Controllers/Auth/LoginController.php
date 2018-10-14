@@ -42,6 +42,17 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    /**
+     *  デモユーザでログイン
+     *
+     * @return \Illuminate\Http\Response
+     */
+     public function loginDemo()
+     {
+       Auth::login(User::where('twitter_id','11111111')->first());
+       Auth::user()->update(['api_token' => str_random(60)]);
+       return redirect('/');
+     }
 
     /**
      * Twitterの認証ページヘユーザーをリダイレクト
@@ -91,7 +102,10 @@ class LoginController extends Controller
     {
         // api_tokenをnullにする
         $user = $request->user();
-        $user->update(['api_token' => null]);
+        if ($user !== null)
+        {
+          $user->update(['api_token' => null]);
+        }
 
         $this->guard()->logout();
 
